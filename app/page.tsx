@@ -1,3 +1,13 @@
+/* 
+
+  Book of Findings app 
+  To-Do:
+  - add multiple select for findings
+  - copy all selected findings
+  - findings export
+*/
+
+
 "use client";
 import { useState, useEffect } from "react";
 
@@ -7,7 +17,7 @@ type Finding = {
   observation: string;
   impact: string;
   recommendation: string;
-  type: "Web App" | "Mobile" | "Internal" | "External";
+  type: "Web App" | "Mobile" | "Internal" | "External" | "Network";
 };
 
 const findings: Finding[] = [
@@ -224,7 +234,7 @@ export default function Home() {
                   onClick={() => setSeverityFilter(sev as any)}
                   className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                     severityFilter === sev
-                      ? "bg-red-600 text-white"
+                      ? "bg-blue-600 text-white"
                       : "bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
                   }`}
                 >
