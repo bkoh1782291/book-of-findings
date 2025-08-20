@@ -172,6 +172,7 @@ export default function Home() {
     Mobile: "📱",
     Internal: "🏢",
     External: "🌍",
+    Network: "",
   };
 
   // ✅ helper to show toast when copy is clicked
@@ -210,7 +211,7 @@ export default function Home() {
             {/* Filter by Type */}
             <div className="flex items-center gap-2">
               <span className="font-semibold">Filter by Type:</span>
-              {["All", "Web App", "Mobile", "Internal", "External"].map((type) => (
+              {["All", "Web App", "Mobile", "Internal", "External", "Network"].map((type) => (
                 <button
                   key={type}
                   onClick={() => setTypeFilter(type as any)}
