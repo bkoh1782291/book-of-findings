@@ -10,6 +10,8 @@
 
 "use client";
 import { useState, useEffect } from "react";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 type Finding = {
   name: string;
@@ -17,7 +19,7 @@ type Finding = {
   observation: string;
   impact: string;
   recommendation: string;
-  type: "Web App" | "Mobile" | "Internal" | "External" | "Network";
+  type: "Web App" | "Mobile" | "Infra" | "Wi-Fi" | "Thick Client" | "Red Team" | "Source Code" | "Others";
 };
 
 const findings: Finding[] = [
@@ -35,7 +37,7 @@ const findings: Finding[] = [
     observation: "Users allowed to set short passwords.",
     impact: "Increases likelihood of brute force attacks.",
     recommendation: "Enforce strong password requirements.",
-    type: "Internal",
+    type: "Infra",
   },
   {
     name: "Insecure Data Storage",
@@ -51,7 +53,7 @@ const findings: Finding[] = [
     observation: "SSH port exposed to the internet.",
     impact: "Could be brute-forced if weak credentials exist.",
     recommendation: "Restrict access with firewall and keys.",
-    type: "External",
+    type: "Infra",
   },
   {
     name: "Cookie SameSite Flag",
@@ -144,6 +146,46 @@ export default function Home() {
     return () => clearInterval(timer);
   }, []);
 
+  // ✅ new state for selected findings
+  const [selectedFindings, setSelectedFindings] = useState<Finding[]>([]);
+
+  // ✅ handle selecting/deselecting a finding
+  const toggleSelectFinding = (finding: Finding) => {
+    setSelectedFindings((prev) =>
+      prev.includes(finding)
+        ? prev.filter((f) => f !== finding)
+        : [...prev, finding]
+    );
+  };
+
+  // ✅ export to Excel
+  const handleExportExcel = () => {
+    if (selectedFindings.length === 0) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(selectedFindings);
+
+    // ✅ Set column widths (optional, adjust per need)
+    worksheet['!cols'] = [
+      { wch: 20 }, // Name
+      { wch: 10 }, // Severity
+      { wch: 15 }, // Type
+      { wch: 40 }, // Observation
+      { wch: 40 }, // Impact
+      { wch: 40 }, // Recommendation
+    ];
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Findings");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const data = new Blob([excelBuffer], { type: "application/octet-stream" });
+    saveAs(data, "selected-findings.xlsx");
+  };
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
@@ -170,9 +212,12 @@ export default function Home() {
   const typeIcons: Record<Finding["type"], string> = {
     "Web App": "🌐",
     Mobile: "📱",
-    Internal: "🏢",
-    External: "🌍",
-    Network: "",
+    Infra: "🏢",
+    "Wi-Fi": "🌍",
+    "Thick Client": "",
+    "Red Team": "",
+    "Source Code": "",
+    Others: "",
   };
 
   // ✅ helper to show toast when copy is clicked
@@ -185,6 +230,7 @@ export default function Home() {
   return (
     <div className={`${darkMode ? "dark" : ""}`}>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6">
+        
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-3xl font-bold">📖 Book Of Findings</h1>
@@ -197,21 +243,13 @@ export default function Home() {
 
         {/* Search + Filters */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          {/* Search Bar */}
-          <input
-            type="text"
-            placeholder="🔍 Search findings..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 rounded-md border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex-1"
-          />
-
+          
           {/* Filters */}
           <div className="flex flex-wrap gap-6">
             {/* Filter by Type */}
             <div className="flex items-center gap-2">
               <span className="font-semibold">Filter by Type:</span>
-              {["All", "Web App", "Mobile", "Internal", "External", "Network"].map((type) => (
+              {["All", "Web App", "Mobile", "Infrastructure", "Wi-Fi", "Thick Client", "Red Team", "Source Code", "Others"].map((type) => (
                 <button
                   key={type}
                   onClick={() => setTypeFilter(type as any)}
@@ -229,7 +267,7 @@ export default function Home() {
             {/* Filter by Severity */}
             <div className="flex items-center gap-2">
               <span className="font-semibold">Filter by Severity:</span>
-              {["All", "Critical", "High", "Medium", "Low", "Info"].map((sev) => (
+              {["All", "Critical", "High", "Medium", "Low", "Informational"].map((sev) => (
                 <button
                   key={sev}
                   onClick={() => setSeverityFilter(sev as any)}
@@ -246,6 +284,33 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="mb-4 flex justify-end">
+        {/* Search Bar */}
+          <input
+            type="text"
+            placeholder="🔍 Search findings..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="px-8 py-2 rounded-md border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex-1"
+          />
+          <button
+            onClick={handleExportExcel}
+            disabled={selectedFindings.length === 0}
+            className={`px-4 py-2 rounded-md font-medium ${
+              selectedFindings.length === 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-green-600 hover:bg-green-700 text-white"
+            }`}
+          >
+            ⬇️ Export Selected ({selectedFindings.length})
+          </button>
+        </div>
+
+        {/* ✅ Export Button */}
+        <div className="mb-4 flex justify-end">
+          
+        </div>
+
         {/* Results Count */}
         <div className="mb-4 font-semibold">
           {filteredFindings.length} finding(s) matching filters
@@ -256,6 +321,7 @@ export default function Home() {
           <table className="min-w-full border border-gray-300 dark:border-gray-700">
             <thead className="bg-gray-200 dark:bg-gray-800">
               <tr>
+                <th className="px-4 py-2 text-left"></th>
                 <th className="px-4 py-2 text-left">Name</th>
                 <th className="px-4 py-2 text-left">Severity</th>
                 <th className="px-4 py-2 text-left">Type</th>
@@ -271,6 +337,15 @@ export default function Home() {
                   key={idx}
                   className="border-t border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
                 >
+                  {/* ✅ Checkbox */}
+                  <td className="px-4 py-4 text-center">
+                    <input
+                      type="checkbox"
+                      checked={selectedFindings.includes(f)}
+                      onChange={() => toggleSelectFinding(f)}
+                    />
+                  </td>
+
                   <td className="px-4 py-2">{f.name}</td>
                   <td className="px-4 py-2">
                     <span
