@@ -291,12 +291,12 @@ export default function Home() {
             placeholder="🔍 Search findings..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-8 py-2 rounded-md border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex-1"
+            className="px-4 py-1 rounded-md border dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 flex-1"
           />
           <button
             onClick={handleExportExcel}
             disabled={selectedFindings.length === 0}
-            className={`px-4 py-2 rounded-md font-medium ${
+            className={`px-4 py-2 rounded-md font-medium mx-6 ${
               selectedFindings.length === 0
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-green-600 hover:bg-green-700 text-white"
@@ -304,11 +304,6 @@ export default function Home() {
           >
             ⬇️ Export Selected ({selectedFindings.length})
           </button>
-        </div>
-
-        {/* ✅ Export Button */}
-        <div className="mb-4 flex justify-end">
-          
         </div>
 
         {/* Results Count */}
