@@ -119,6 +119,106 @@ const findings: Finding[] = [
     recommendation: "Reject files with multiple extensions and use a whitelist approach for allowed file types. Store uploaded files outside the web root and rename them to prevent execution.",
     type: "Web App"
   }
+  {
+    name: "SQL Injection Vulnerability (Time-Based Blind)",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application is vulnerable to a Time-Based Blind SQL Injection.",
+    impact: "SQL Injection allows an attacker to extract data and possibly modify information within the database using SQL queries that are executable.",
+    recommendation: "Reconfigure the web application's login page with sufficient Input Validation and Sanitization, removing special characters that are used in SQL queries and prepared SQL statements that handle SQL queiries safely."
+  },
+  {
+    name: "Microsoft SQL Server Version Outdated and Unsupported",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application is vulnerable due to the SQL Server's version, which is running Microsoft SQL Server 2012. This version of SQL is outdated and unsupported.",
+    impact: "The outdated Microsoft SQL version contains multiple well known vulnerabilities that are unpatched. In addition, security support for the SQL server has been deprecated.",
+    recommendation: "Reconfigure the application with an updated SQL version that is still supported wiith security updates. Examples such as SQL Server 2019 or SQL Server 2022."
+  },
+  {
+    name: "Stored Cross Site Scripting (XSS)",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application is vulnerable to Stored Cross-Site Scripting Attacks. This means that the XSS Payload was persistently stored on the web application.",
+    impact: "XSS allows attackers to inject malicious scripts into web pages viewed by other users. This can lead to session hijacking, credential theft, defacement, or redirection to malicious sites, compromising user trust and application integrity.",
+    recommendation: "Sanitize and encode all user input before rendering it in the browser. Use frameworks or libraries that auto-escape output (e.g., React, Angular). Implement Content Security Policy (CSP) headers to restrict script execution and regularly test for XSS using automated tools."
+  },
+  {
+    name: "Reflected Cross-Site Scripting (XSS)",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application is vulnerable to Reflected Cross-Site Scripting Attacks.",
+    impact: "XSS allows attackers to inject malicious scripts into web pages viewed by other users. This can lead to session hijacking, credential theft, defacement, or redirection to malicious sites, compromising user trust and application integrity.",
+    recommendation: "Sanitize and encode all user input before rendering it in the browser. Use frameworks or libraries that auto-escape output (e.g., React, Angular). Implement Content Security Policy (CSP) headers to restrict script execution and regularly test for XSS using automated tools."
+  },
+  {
+    name: "Command Injection",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application is vulnerable to Command Injections. This was observed through the injection of HTML code that retrieved the website's cookie values.",
+    impact: "Command Injection allows attackers to execute arbitrary system commands on the server through scirpts and malicious code. This can lead to full system compromise, data theft, or service disruption.",
+    recommendation: "Reconfigure the web application to use parameterized queries or safe APIs that do not leak any information from the malicious code. More importantly, validate and sanitize all user inputs strictly. Lastly, run applications with the least privileges necessary."
+  },
+  {
+    name: "Arbitrary File Execution via File Upload",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG identified that a javascript within an uploaded PDF file was successfully executed upon opening the file. ",
+    impact: "This behavior can be exploited to gain unauthorized access, execute arbitrary code, or compromise the server.",
+    recommendation: "Implement security measures as below:\
+      \n- Never allow uploaded files to be executed.\
+      \n- Store files outside the web root.\
+      \n - Use strict file type and content validation.\
+      \n - Sanitize and rename uploaded files.\
+      \n - Implement antivirus scanning and sandboxing.."
+  },
+  {
+    name: "Unrestricted Access to API Token Generation Page",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG identified that the directory listing page includes an API token generation page which is publicly accessible without authentication.",
+    impact: "Unauthorised users may generate valid API tokens, potentially allowing priviledge escalation or data exfiltration. If tokens generated are long-lived or have broad-scopes, risk of abuse may be higher.",
+    recommendation: "Restrict access to the token generation page using proper authentication and authorization mechanisms."
+  },
+  {
+    name: "Sensitive Directories & Pages Publicly Accessible",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG identified that the directory listing page (refer WA-05) includes sensitive pages and directories that are publicly accessible.",
+    impact: "Unauthorised users may access the directories potentially causing information leakage or compromising of data integrity.",
+    recommendation: "Restrict access to the the directory listing page by using proper authentication and authorization mechanims."
+  },
+  {
+    name: "Redis Server Unprotected by Password Authentication",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment KPMG identified that the Redis server running on the remote host does not require any password authentication to access it. ",
+    impact: "The lack of password authentication on Redis server allows attackers to gain unauthorized access to the Redis server, execute arbitary commands,  gain access to sensitive data, modify and delete the sensitive data, and has potential to escalate privileges within the network.",
+    recommendation: "Secure the Redis server by enabling password authentication. "
+  },
+  {
+    name: "Sensitive Page Accessible",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG identified a sensitive page that allows the creation of databases.",
+    impact: "Attackers could use these pages to gain insights into application structure or exploit unintended functionalities.",
+    recommendation: "Remove these unwanted web pages."
+  },
+  {
+    name: "Multiple Unsupported Web Server Version",
+    severity: "CRITICAL",
+    type: "Web App",
+    observation: "During the assessment, KPMG identified that the web application is running with a version of the Web Server that has reached its end of life product cycle, which means that the web server will no longer be supported or updated by the official vendor.",
+    impact: "Using software that is no longer supported by the vendor implies that no new security patches for the product will be implemented. As a result, the product may contain future vulnerabilities that will never be fixed.",
+    recommendation: "Upgrade Microsoft IIS to version 8.0 or above.\
+    \
+      \n Upgrade Apache HTTP Server to version 2.4.43 or above.\
+      \
+      \n References:\
+      \n https://docs.microsoft.com/en-us/lifecycle/products/internet-information-services-iis\
+      \
+      \n https://httpd.apache.org/"
+  },
 ];
 
 // define severity order
