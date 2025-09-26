@@ -118,10 +118,10 @@ const findings: Finding[] = [
     impact: "Attackers can upload malicious scripts disguised as harmless files. If executed on the server, this could lead to remote code execution, data breaches, or full server compromise.",
     recommendation: "Reject files with multiple extensions and use a whitelist approach for allowed file types. Store uploaded files outside the web root and rename them to prevent execution.",
     type: "Web App"
-  }
+  },
   {
     name: "SQL Injection Vulnerability (Time-Based Blind)",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to a Time-Based Blind SQL Injection.",
     impact: "SQL Injection allows an attacker to extract data and possibly modify information within the database using SQL queries that are executable.",
@@ -129,7 +129,7 @@ const findings: Finding[] = [
   },
   {
     name: "Microsoft SQL Server Version Outdated and Unsupported",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable due to the SQL Server's version, which is running Microsoft SQL Server 2012. This version of SQL is outdated and unsupported.",
     impact: "The outdated Microsoft SQL version contains multiple well known vulnerabilities that are unpatched. In addition, security support for the SQL server has been deprecated.",
@@ -137,7 +137,7 @@ const findings: Finding[] = [
   },
   {
     name: "Stored Cross Site Scripting (XSS)",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Stored Cross-Site Scripting Attacks. This means that the XSS Payload was persistently stored on the web application.",
     impact: "XSS allows attackers to inject malicious scripts into web pages viewed by other users. This can lead to session hijacking, credential theft, defacement, or redirection to malicious sites, compromising user trust and application integrity.",
@@ -145,7 +145,7 @@ const findings: Finding[] = [
   },
   {
     name: "Reflected Cross-Site Scripting (XSS)",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Reflected Cross-Site Scripting Attacks.",
     impact: "XSS allows attackers to inject malicious scripts into web pages viewed by other users. This can lead to session hijacking, credential theft, defacement, or redirection to malicious sites, compromising user trust and application integrity.",
@@ -153,7 +153,7 @@ const findings: Finding[] = [
   },
   {
     name: "Command Injection",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Command Injections. This was observed through the injection of HTML code that retrieved the website's cookie values.",
     impact: "Command Injection allows attackers to execute arbitrary system commands on the server through scirpts and malicious code. This can lead to full system compromise, data theft, or service disruption.",
@@ -161,20 +161,22 @@ const findings: Finding[] = [
   },
   {
     name: "Arbitrary File Execution via File Upload",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that a javascript within an uploaded PDF file was successfully executed upon opening the file. ",
-    impact: "This behavior can be exploited to gain unauthorized access, execute arbitrary code, or compromise the server.",
-    recommendation: "Implement security measures as below:\
-      \n- Never allow uploaded files to be executed.\
-      \n- Store files outside the web root.\
-      \n - Use strict file type and content validation.\
-      \n - Sanitize and rename uploaded files.\
-      \n - Implement antivirus scanning and sandboxing.."
+    observation: `During the assessment, KPMG identified that a javascript within an uploaded PDF file
+    was successfully executed upon opening the file.`,
+    impact: `This behavior can be exploited to gain unauthorized access, 
+    execute arbitrary code, or compromise the server.`,
+    recommendation: `Implement security measures as below:
+       - Never allow uploaded files to be executed.
+       - Store files outside the web root.
+       - Use strict file type and content validation.
+       - Sanitize and rename uploaded files.
+       - Implement antivirus scanning and sandboxing.`
   },
   {
     name: "Unrestricted Access to API Token Generation Page",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the directory listing page includes an API token generation page which is publicly accessible without authentication.",
     impact: "Unauthorised users may generate valid API tokens, potentially allowing priviledge escalation or data exfiltration. If tokens generated are long-lived or have broad-scopes, risk of abuse may be higher.",
@@ -182,7 +184,7 @@ const findings: Finding[] = [
   },
   {
     name: "Sensitive Directories & Pages Publicly Accessible",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the directory listing page (refer WA-05) includes sensitive pages and directories that are publicly accessible.",
     impact: "Unauthorised users may access the directories potentially causing information leakage or compromising of data integrity.",
@@ -190,7 +192,7 @@ const findings: Finding[] = [
   },
   {
     name: "Redis Server Unprotected by Password Authentication",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment KPMG identified that the Redis server running on the remote host does not require any password authentication to access it. ",
     impact: "The lack of password authentication on Redis server allows attackers to gain unauthorized access to the Redis server, execute arbitary commands,  gain access to sensitive data, modify and delete the sensitive data, and has potential to escalate privileges within the network.",
@@ -198,7 +200,7 @@ const findings: Finding[] = [
   },
   {
     name: "Sensitive Page Accessible",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified a sensitive page that allows the creation of databases.",
     impact: "Attackers could use these pages to gain insights into application structure or exploit unintended functionalities.",
@@ -206,7 +208,7 @@ const findings: Finding[] = [
   },
   {
     name: "Multiple Unsupported Web Server Version",
-    severity: "CRITICAL",
+    severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application is running with a version of the Web Server that has reached its end of life product cycle, which means that the web server will no longer be supported or updated by the official vendor.",
     impact: "Using software that is no longer supported by the vendor implies that no new security patches for the product will be implemented. As a result, the product may contain future vulnerabilities that will never be fixed.",
@@ -219,6 +221,7 @@ const findings: Finding[] = [
       \
       \n https://httpd.apache.org/"
   },
+  
 ];
 
 // define severity order
@@ -420,9 +423,9 @@ export default function Home() {
                 <th className="px-4 py-2 text-left">Name</th>
                 <th className="px-4 py-2 text-left">Severity</th>
                 <th className="px-4 py-2 text-left">Type</th>
-                <th className="px-4 py-2 text-left">Observation</th>
-                <th className="px-4 py-2 text-left">Impact</th>
-                <th className="px-4 py-2 text-left">Recommendation</th>
+                <th className="px-4 py-2 text-left whitespace-pre-line">Observation</th>
+                <th className="px-4 py-2 text-left whitespace-pre-line">Impact</th>
+                <th className="px-4 py-2 text-left whitespace-pre-line">Recommendation</th>
                 <th className="px-4 py-2">Copy</th>
               </tr>
             </thead>
@@ -460,9 +463,9 @@ export default function Home() {
                   <td className="px-4 py-2">
                     {typeIcons[f.type]} {f.type}
                   </td>
-                  <td className="px-4 py-2">{f.observation}</td>
-                  <td className="px-4 py-2">{f.impact}</td>
-                  <td className="px-4 py-2">{f.recommendation}</td>
+                  <td className="px-4 py-2 whitespace-pre-line">{f.observation}</td>
+                  <td className="px-4 py-2 whitespace-pre-line">{f.impact}</td>
+                  <td className="px-4 py-2 whitespace-pre-line">{f.recommendation}</td>
                   <td className="px-4 py-2">
                     <button
                       onClick={() =>
