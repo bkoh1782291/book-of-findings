@@ -1,4 +1,5 @@
 /* 
+
   Book of Findings app 
   To-Do:
   - add multiple select for findings
@@ -22,38 +23,6 @@ type Finding = {
 };
 
 const findings: Finding[] = [
-  {
-    name: "SQL Injection",
-    severity: "High",
-    observation: "Unsanitized input in login form.",
-    impact: "Can dump entire database.",
-    recommendation: "Use prepared statements with parameterized queries.",
-    type: "Web App",
-  },
-  {
-    name: "Weak Password Policy",
-    severity: "Medium",
-    observation: "Users allowed to set short passwords.",
-    impact: "Increases likelihood of brute force attacks.",
-    recommendation: "Enforce strong password requirements.",
-    type: "Infra",
-  },
-  {
-    name: "Insecure Data Storage",
-    severity: "Critical",
-    observation: "Sensitive data stored in plaintext on device.",
-    impact: "Data theft if device is compromised.",
-    recommendation: "Encrypt sensitive data at rest.",
-    type: "Mobile",
-  },
-  {
-    name: "Open SSH Port",
-    severity: "Low",
-    observation: "SSH port exposed to the internet.",
-    impact: "Could be brute-forced if weak credentials exist.",
-    recommendation: "Restrict access with firewall and keys.",
-    type: "Infra",
-  },
   {
     name: "Cookie SameSite Flag",
     severity: "Low",
@@ -81,17 +50,9 @@ const findings: Finding[] = [
   {
     name: "Cross-Origin-Resource-Policy Security Header Missing",
     severity: "Low",
-    observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Resource-Policy\" Security Header is absent from the web application.",
+    observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Resource-Policy\" Security Header is absent from the web application. The purpose of the header is to control which origins can load your resources (e.g., images, scripts), preventing unauthorized cross-origin access.",
     impact: "Without the \"Cross-Origin-Resource-Policy\" Security Header, the web application is unable to block access to a specific resource that is sent by the server.",
     recommendation: "Reconfigure the web application with the \"Cross-Origin-Resource-Policy\" Security Header enabled. Additionally, ensure that the value set for the policy is \"same-origin\", or \"same-site\". This means that the resources are only allowed to be fetched from the same origin or the same site.",
-    type: "Web App"
-  },
-  {
-    name: "Stored HTML Injection",
-    severity: "High",
-    observation: "During the assessment, KPMG observed that the web application is vulnerable to HTML Injection.",
-    impact: "Stored HTML Injection enables attackers to inject arbitrary HTML content into the application, which is then stored and rendered to other users. This can lead to UI redressing, phishing, or even XSS if scripts are embedded.",
-    recommendation: "Validate and sanitize all user-submitted HTML content. If HTML input is necessary (e.g., for rich text), use a secure HTML sanitizer (like DOMPurify) to strip dangerous tags and attributes. Avoid rendering raw HTML unless absolutely required.",
     type: "Web App"
   },
   {
@@ -144,7 +105,7 @@ const findings: Finding[] = [
   },
   {
     name: "Reflected Cross-Site Scripting (XSS)",
-    severity: "Critical",
+    severity: "High",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Reflected Cross-Site Scripting Attacks.",
     impact: "XSS allows attackers to inject malicious scripts into web pages viewed by other users. This can lead to session hijacking, credential theft, defacement, or redirection to malicious sites, compromising user trust and application integrity.",
@@ -215,8 +176,8 @@ const findings: Finding[] = [
     Upgrade Apache HTTP Server to version 2.4.43 or above.
     
     References:
-    https://docs.microsoft.com/en-us/lifecycle/products/internet-information-services-iis\
-      https://httpd.apache.org/`
+    https://docs.microsoft.com/en-us/lifecycle/products/internet-information-services-iis
+    https://httpd.apache.org/`
   },
   {
     name: "Unsupported Server Version",
@@ -246,18 +207,6 @@ const findings: Finding[] = [
     recommendation: "Upgrade to Apache Tomcat version 7.0.100, 8.5.51, 9.0.31 or later."
   },
   {
-    name: "Multiple Unsupported Server Version",
-    severity: "Critical",
-    type: "Infra",
-    observation: "During the assessment, KPMG noted that the few server version has reached its End of Life product cycle: -Microsoft SQL Server 2000 8.00.311; RTMa -Microsoft SQL Server 2008 R2 10.50.1617; RTM+ -Microsoft SQL Server 2008 R2 10.50.2550; SP1+ -Microsoft SQL Server 2008 R2 10.50.4000; SP2 -Microsoft SQL Server 2008 R2 10.50.6000; SP3 -Microsoft SQL Server 2008 R2 10.50.6560 -Microsoft IIS 7.5 -Oracle Database 12.1.0.1.0",
-    impact: "Using software that no longer supported by the vendor implies that no new security patches for the product. As a result, the product may contain future security vulnerabilities that will never be fixed.",
-    recommendation: `Upgrade to latest supported SQL Server version.
-      Upgrade Microsoft IIS to version 8.0 or above.
-      Upgrade Oracle Database to supported version.
-      References:
-    https://support.oracle.com/knowledge/Oracle%20Database%20Products/742060_1.html`
-  },
-  {
     name: "Insecure Direct Object Reference (IDOR)",
     severity: "High",
     type: "Web App",
@@ -272,14 +221,6 @@ const findings: Finding[] = [
     observation: "During the assessment, KPMG observed that the web application is vulnerable to HTML Injection.",
     impact: "Stored HTML Injection enables attackers to inject arbitrary HTML content into the application, which is then stored and rendered to other users. This can lead to UI redressing, phishing, or even XSS if scripts are embedded.",
     recommendation: "Validate and sanitize all user-submitted HTML content. If HTML input is necessary (e.g., for rich text), use a secure HTML sanitizer (like DOMPurify) to strip dangerous tags and attributes. Avoid rendering raw HTML unless absolutely required."
-  },
-  {
-    name: "Plaintext Password Submission",
-    severity: "High",
-    type: "Web App",
-    observation: "During the assessment, KPMG observed that the web application submits the username and password credentials in plaintext.",
-    impact: "The impact of having credentials transmitted in plaintext, is that it can be intercepted by attackers (e.g., via packet sniffing). This leads to credential theft and unauthorized access.",
-    recommendation: "Enforce HTTPS for all data transmissions for the web application and Implement HSTS (HTTP Strict Transport Security)."
   },
   {
     name: "Web Application Hosted Over Unencrypted Connection (HTTP)",
@@ -603,44 +544,31 @@ Use .htaccess or server settings to restrict access.
     severity: "High",
     type: "Infra",
     observation: "During the assessment, KPMG identified that the web application is running with vulnerable PHP version (x.x.x).",
-    impact: `The PHP version used is vulnerable to multiple medium to critical vulnerabilities.
-
-        Identified version:
-        PHP 7.3.7
-
-        CVE-2019-11043:
-        Remote code execution
+    impact: `The PHP version used is vulnerable to multiple medium to critical vulnerabilities. Identified version: PHP 7.3.7
+        CVE-2019-11043: Remote code execution
 
         CVE-2019-13224,
-        CVE-2020-7061:
-        Heap Buffer Overflow
+        CVE-2020-7061: Heap Buffer Overflow
 
         CVE-2020-7062,
-        CVE-2021-21702:
-        Denial of Service (DoS)
+        CVE-2021-21702: Denial of Service (DoS)
 
-        CVE-2020-7063:
-        Insecure File Permissions
+        CVE-2020-7063: Insecure File Permissions
 
-        CVE-2020-8169:
-        Partial Password Disclosure
+        CVE-2020-8169: Partial Password Disclosure
 
         CVE-2020-7064,
         CVE-2019-11041,
-        CVE-2019-11042:
-        Information Disclosure or crash
+        CVE-2019-11042: Information Disclosure or crash
 
-        CVE-2020-7065:
-        Stack Buffer overflow
+        CVE-2020-7065: Stack Buffer overflow
 
-        CVE-2020-7066:
-        Sensitive information disclosure
+        CVE-2020-7066: Sensitive information disclosure
 
-        CVE-2020-7067:
-    Out of bound read vulnerability`,
+        CVE-2020-7067: Out of bound read vulnerability`,
     recommendation: `"Update to the latest PHP version.
                       The latest PHP version in 7.X branch is 7.4.22
-    https://www.php.net/ChangeLog-7.php"`
+                      https://www.php.net/ChangeLog-7.php"`
   },
   {
     name: "Outdated OpenSSH Version",
@@ -648,12 +576,12 @@ Use .htaccess or server settings to restrict access.
     type: "Infra",
     observation: "During the assessment, KPMG identified that the infrastructure is running with vulnerable OpenSSH version (7.2 & 8.1).",
     impact: `The OpenSSH version used is vulnerable to multiple medium to critical vulnerabilities.
-Identified version:
-OpenSSH 7.2
+    Identified version:
+    OpenSSH 7.2
     OpenSSH 8.1`,
     recommendation: `Upgrade to the latest OpenSSH version.
-The latest OpenSSH version is 9.0.
-References:
+    The latest OpenSSH version is 9.0.
+    References:
     https://www.openssh.com/releasenotes.html#9.0`
   },
   {
@@ -678,7 +606,7 @@ References:
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application has no anti CSRF tokens implemented.",
     impact: "Introduces Cross-Site Request Forgery (CSRF) attacks, which allows an attacker to perform unauthorized actions on behalf of users.",
-    recommendation: "Implement anti-CSRF tokens in all sensitive forms such as login and forgot password to prevent unauthorized form submissions."
+    recommendation: `Implement Anti-CSRF tokens in all sensitive forms such as login and forgot password to prevent unauthorized form submissions. To do this, generate a cryptographically secure random token for each user session or request. Use a secure random number generator (e.g., crypto.randomBytes in Node.js, secrets module in Python, or SecureRandom in Java). Associate the token with the user’s session (e.g., store it in the session object or database).`
   },
   {
     name: "Cookie without Secure Flag",
@@ -686,7 +614,13 @@ References:
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application's cookies does not have the \"Secure\" flag enabled: - xxx",
     impact: "Allows an attacker to access cookies via unencrypted connections.",
-    recommendation: "Ensure the \"Secure\" flag is enabled for all cookies."
+    recommendation: `Ensure the \"Secure\" flag is enabled for all cookies.
+
+    For example in express.js: 
+    app.get('/', (req, res) => {
+      res.cookie('sessionID', '12345', {
+        secure: true, // Set Secure flag
+    });`
   },
   {
     name: "Invalid Emails Accepted for Registration",
@@ -1215,15 +1149,6 @@ References:
     recommendation: "Remediation and lead practices defined by the industry, is to hash and obfuscate the sensitive information being stored."
   },
   {
-    name: "Insecure Data Storage",
-    severity: "Medium",
-    type: "Mobile",
-    observation: "During the assessment, it was noted that the mobile application is storing the data insecurely. It was observed that the username and other details were stored in plain text.",
-    impact: `Business Impact: Attacker could use the insecure data storage to retrieve sensitive information, it may lead to Identify Theft.
-    Technical Impact: Attacker could steal sensitive information and perform further phishing attacks.`,
-    recommendation: "Remediation and lead practices defined by the industry, is to not store usernames and passwords in plaintext. This is to prevent the attacker to obtain the credentials with ease. For this case, remediation is to hash the stored data multiple times to increase complexity."
-  },
-  {
     name: "Potentially Hardcoded Data",
     severity: "Medium",
     type: "Mobile",
@@ -1233,7 +1158,7 @@ References:
     Reference: https://www.netguru.com/blog/hardcoded-keys-storage-mobile-app`
   },
   {
-    name: "Application uses weak Hashing Algorithms",
+    name: "Application Uses Weak Hashing Algorithms",
     severity: "Medium",
     type: "Mobile",
     observation: "During the assessment, it was noted that the mobile application’s is using multiple weak algorithms for encryption.",
@@ -1262,88 +1187,64 @@ References:
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"X-XSS-Protection\" header is missing from the response headers.",
-    impact: "Increases the risk of Cross-Site Scripting (XSS) attacks.",
-    recommendation: "To configure the web server to include the \"X-XSS-Protection\" header."
+    impact: "Without the header, it increases the risk of Cross-Site Scripting (XSS) attacks. The header instructs the browser on how to handle detected XSS attacks by enabling or disabling its XSS filter or specifying how to respond when an attack is detected. The XSS filter compares incoming request data (e.g., query parameters) with the response content to identify potential script injections.",
+    recommendation: "Reconfigure the web server to include the \"X-XSS-Protection\" header."
   },
   {
     name: "Missing \"X-Content-Type-Options\" Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the X-Content-Type-Options Header is missing from the response headers.",
-    impact: "Allows the web application to be exposed to MIME-sniffing attacks and Cross-Site Scripting (XSS).",
-    recommendation: "To configure the web server to include the \"X-Content-Type Options\" header with value \"nosniff\"."
+    impact: "Allows the web application to be exposed to MIME-sniffing attacks and Cross-Site Scripting (XSS). Attackers can upload malicious files (e.g., a script disguised as an image) that the browser misinterprets as executable content, leading to XSS or code execution.",
+    recommendation: "Reconfigure the web server to include the \"X-Content-Type Options\" header with value \"nosniff\"."
   },
   {
     name: "Missing \"X-Frame-Options\" Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the X-Frame-Options (anti-clickjacking) header is missing from the response headers.",
-    impact: "Allows an attacker to conduct clickjacking attack.",
-    recommendation: "To configure the web server to include the \"X-Frame-Options\" header with the value \"DENY\"."
+    impact: "Attackers can overlay a malicious webpage over a legitimate site, tricking users into performing unintended actions (e.g., clicking a button to transfer funds).",
+    recommendation: "Reconfigure the web server to include the \"X-Frame-Options\" header with the value \"DENY\"."
   },
   {
     name: "Missing \"Content-Security-Policy\" (CSP) Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"Content-Security-Policy\" (CSP) header is missing from the response headers.",
-    impact: "Allows an attacker to inject malicious code, which ultimately leads to XSS attacks and data theft.",
-    recommendation: "To configure the web server to include the CSP header along with its relevant attributes."
+    impact: "Allows an attacker to inject malicious code such as malicious scripts injected via user input, which ultimately leads to XSS attacks and data theft.",
+    recommendation: "Reconfigure the web server to include the CSP header along with its relevant attributes."
   },
   {
     name: "Missing \"X-Permitted-Cross-Domain-Policies\" Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"X-Permitted-Cross-Domain-Policies\" header is missing from the response headers.",
-    impact: "Increases the risk of data theft via unauthorized cross-domain access.",
-    recommendation: "To configure the web server to include the \"X-Permitted-Cross-Domain-Policies\" headers."
+    impact: "Increases the risk of data theft via unauthorized cross-domain access. For example, plugins like Flash or Acrobat Reader could load sensitive resources from your site in a malicious context.",
+    recommendation: "Reconfigure the web server to include the \"X-Permitted-Cross-Domain-Policies\" headers."
   },
   {
     name: "Missing \"Expect-CT\" Header",
     severity: "Low",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Expect-CT\" header is missing from the response headers.",
-    impact: "Increases the risk of Man-In-The-Middle (MITM) attacks.",
-    recommendation: "To configure the web server to include the \"Expect-CT\" headers."
-  },
-  {
-    name: "Missing \"Permissions-Policy\" Header",
-    severity: "Low",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Permissions-Policy\" header is missing from the response headers.",
-    impact: "Missing Permission Policy header can lead to significant security vulnerabilities, inconsistent behaviour and regulatory challenges.",
-    recommendation: "To configure the web server to include the \"Permission-Policy\" headers."
-  },
-  {
-    name: "Missing \"Cross-Origin-Embedder-Policy\" Headers",
-    severity: "Low",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Cross-Origin-Embedder-Policy\" header is missing from the response headers.",
-    impact: "Exposed an application to significant security vulnerabilities, hinder performance and limit the use of modern web features.",
-    recommendation: "To configure the web server to include the \"Cross-Origin-Embedder-Policy\" headers."
-  },
-  {
-    name: "Missing \"Cross-Origin-Resource-Policy\" Headers",
-    severity: "Low",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Cross-Origin-Resource-Policy\" header is missing from the response headers.",
-    impact: "Increases the risk of data leakage.",
-    recommendation: "To configure the web server to include the \"Cross-Origin-Resource-Policy\" headers."
+    observation: "During the assessment, KPMG identified that the \"Expect-CT\" header is missing from the response headers. The purpose of the Expect-CT header is to enforce Certificate Transparency (CT), which is to ensure SSL/TLS certificates are logged and verifiable, preventing the use of fraudulent certificates.",
+    impact: "Increases the risk of Man-In-The-Middle (MITM) attacks. Attackers could use rogue certificates to impersonate, intercepting sensitive data.",
+    recommendation: "Reconfigure the web server to include the \"Expect-CT\" headers."
   },
   {
     name: "Missing \"Cross-Origin-Opener-Policy\" Header",
     severity: "Low",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Cross-Origin-Opener-Policy\" header is missing from the response headers.",
-    impact: "Increase to risk of data exposure and complicate browser interactions.",
-    recommendation: "To configure the web server to include the \"Cross-Origin-Opener-Policy\" headers."
+    observation: "During the assessment, KPMG identified that the \"Cross-Origin-Opener-Policy\" header is missing from the response headers. The purpose of the header is to control whether a window can share its browsing context with other windows (e.g., popups), mitigating attacks and cross-origin data leaks.",
+    impact: "Increase to risk of data exposure and complicate browser interactions. For example, Malicious sites could access your site’s window object via popups, potentially exploiting CPU vulnerabilities (e.g., Spectre) to steal data.",
+    recommendation: "Reconfigure the web server to include the \"Cross-Origin-Opener-Policy\" headers."
   },
   {
     name: "Missing \"Referrer-Policy\" Header",
     severity: "Low",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the \"Referrer-Policy\" header is missing from the response headers.",
-    impact: "Sensitive information contained in the URL will be leaked to the cross-site.",
-    recommendation: "To configure the web server to include the \"Referrer-Policy\" headers."
+    observation: "During the assessment, KPMG identified that the \"Referrer-Policy\" header is missing from the response headers. The purpose of the Referrer-Policy header is to control how much information about the referring page (URL) is sent in the Referer header when users click links or load resources.",
+    impact: "Sensitive information contained in the URL will be leaked to the cross-site. For example, sensitive data in URLs (e.g., session tokens, query parameters) could be sent to third-party sites or logged in server logs.",
+    recommendation: "Reconfigure the web server to include the \"Referrer-Policy\" headers."
   },
   {
     name: "Web App Leaks Information via \"Server\" HTTP Response Header",
@@ -1549,7 +1450,7 @@ References:
     type: "Infra",
     observation: "During the assessment, KPMG had discovered that the quote service (QOTD) is running on this host.",
     impact: "An attacker could launch \"ping pong\" attack against QOTD enabled hosts, this is a denial of service attack which will slow down the machines and saturating the network.",
-    recommendation: "Disable qotd service if not required."
+    recommendation: "Disable QOTD service if not required."
   },
   {
     name: "Multiple Version Disclosures",
@@ -1596,12 +1497,12 @@ References:
     observation: "During the assessment, it was observed that the application input accepted malicious payloads.",
     impact: "Improper input validation can enable attacks and lead to unwanted behavior. Parts of the system may receive unintended input, which may result in altered control flow, arbitrary control of a resource, or arbitrary code execution.",
     recommendation: `Input validation can be implemented using any programming technique that allows effective enforcement of syntactic and semantic correctness, for example:
-    1) Data type validators available natively in web application frameworks (such as Django Validators, Apache Commons Validators etc).
-    2) Validation against JSON Schema and XML Schema (XSD) for input in these formats.
-    3) Type conversion (e.g. Integer.parseInt() in Java, int() in Python) with strict exception handling
-    4) Minimum and maximum value range check for numerical parameters and dates, minimum and maximum length check for strings.
-    5) Array of allowed values for small sets of string parameters (e.g. days of week).
-    6) Regular expressions for any other structured data covering the whole input string (^...$) and not using "any character" wildcard (such as . or \S)`
+        1) Data type validators available natively in web application frameworks (such as Django Validators, Apache Commons Validators etc).
+        2) Validation against JSON Schema and XML Schema (XSD) for input in these formats.
+        3) Type conversion (e.g. Integer.parseInt() in Java, int() in Python) with strict exception handling
+        4) Minimum and maximum value range check for numerical parameters and dates, minimum and maximum length check for strings.
+        5) Array of allowed values for small sets of string parameters (e.g. days of week).
+        6) Regular expressions for any other structured data covering the whole input string (^...$) and not using "any character" wildcard (such as . or \S)`
   },
   {
     name: "JavaScript enabled in Webview",
@@ -1610,20 +1511,6 @@ References:
     observation: "During the assessment, it was observed that the mobile application has enabled JavaScript in WebView. By default, JavaScript is disabled in WebView.",
     impact: "If javascript has been enabled it can bring various JS-related security issues, such as cross-site scripting (xss) attacks.",
     recommendation: "KPMG recommends to disable javascript in webview"
-  },
-  {
-    name: "Improper Input Handling",
-    severity: "Low",
-    type: "Mobile",
-    observation: "During the assessment, it was observed that the input accepted malicious payloads",
-    impact: "Improper input validation can enable attacks and lead to unwanted behavior. Parts of the system may receive unintended input, which may result in altered control flow, arbitrary control of a resource, or arbitrary code execution.",
-    recommendation: `Input validation can be implemented using any programming technique that allows effective enforcement of syntactic and semantic correctness, for example:
-    Data type validators available natively in web application frameworks (such as Django Validators, Apache Commons Validators etc).
-    Validation against JSON Schema and XML Schema (XSD) for input in these formats.
-    Type conversion (e.g. Integer.parseInt() in Java, int() in Python) with strict exception handling
-    Minimum and maximum value range check for numerical parameters and dates, minimum and maximum length check for strings.
-    Array of allowed values for small sets of string parameters (e.g. days of week).
-    Regular expressions for any other structured data covering the whole input string (^...$) and not using "any character" wildcard (such as . or \S)`
   },
   {
     name: "Application can read/write to External Storage",
@@ -1660,11 +1547,11 @@ References:
     type: "Mobile",
     observation: "During the assessment, it was noted that the mobile application could install in jailbreak device with bypass.",
     impact: `It is recommended, that the application should implement jailbreak detection, when a jailbreak device is found application should reject to be installed on those devices.
-Reference:
-    https://github.com/securing/IOSSecuritySuite`,
+      Reference:
+      https://github.com/securing/IOSSecuritySuite`,
     recommendation: `Jailbreaking a device impacts the security of applications in two ways:
-It could allow malicious applications or attackers to perform actions as a root user, which compromises the security of other applications running on the phone.
-    Attackers can perform static and dynamic analysis of an application which allows them to find more vulnerabilities if given access.`
+        It could allow malicious applications or attackers to perform actions as a root user, which compromises the security of other applications running on the phone.
+        Attackers can perform static and dynamic analysis of an application which allows them to find more vulnerabilities if given access.`
   },
   {
     name: "Recommendation For Reviewing iOS Policy Settings",
@@ -1729,6 +1616,22 @@ It could allow malicious applications or attackers to perform actions as a root 
     observation: "During the assessment, KPMG identified that the web application use unsupported version of: - Hammer.js (2.0.7),",
     impact: "Affected versions of this package are slowing the hammer.js library which slow down the gesture.",
     recommendation: "Upgrade to latest or supported version of Hammer.js 2.0.8."
+  },
+  {
+    name: "Improper Error Message Handling",
+    severity: "Medium",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application has improper error messages handling. For this example, the error message leaks PHP queries in the web application.",
+    impact: "Detailed error messages can reveal sensitive information (e.g., stack traces, database structure). This aids attackers in crafting targeted attacks.",
+    recommendation: "Reconfigure the web application to display generic error messages to users when errors are present. However, it is also important to log detailed errors internally for debugging."
+  },
+  {
+    name: "Sensitive Information Page Disclosure",
+    severity: "Medium",
+    type: "Web App",
+    observation: "During the assessment, KPMG observed that the web application has improper handling for page redirection. For this example, an error message leaks PHP application code.",
+    impact: "Detailed error messages can reveal sensitive information (e.g., stack traces, database structure). This aids attackers in crafting targeted attacks.",
+    recommendation: "Reconfigure the web application to display generic error messages to users when errors are present. However, it is also important to log detailed errors internally for debugging."
   }
 ];
 
