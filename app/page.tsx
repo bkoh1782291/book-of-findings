@@ -33,36 +33,28 @@ type Finding = {
     */
 
 const findings: Finding[] = [
-  // {
-  //     name: ""
-  //     severity: ""
-  //     observation: ""
-  //     impact: ""
-  //     recommendation: ""
-  //     type: "Red Team"
-  //   },
   {
-    name: "Privileged escalation via IDOR Vulnerability"
-    severity: "High"
-    observation: "During the assessment, KPMG discovered that the application is vulnerable to IDOR. A trainee user was able to escalate their privileges by modifying the request URL parameter (e.g., role=001), successfully changing their role to admin without any server-side authorization checks."
-    impact: "An attacker could gain unauthorized access to administrative-level functionalities, which may lead to data leakage, unauthorized configuration changes, and abuse of user management features."
-    recommendation: "It is recommended to implement strict server-side authorization checks to ensure users can only access or modify resources they are permitted to. Each request should be validated against the user’s role, permissions, and associated organization. Avoid relying solely on client-side parameters to enforce access control.t"
+    name: "Privileged escalation via IDOR Vulnerability",
+    severity: "High",
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to IDOR. A trainee user was able to escalate their privileges by modifying the request URL parameter (e.g., role=001), successfully changing their role to admin without any server-side authorization checks.",
+    impact: "An attacker could gain unauthorized access to administrative-level functionalities, which may lead to data leakage, unauthorized configuration changes, and abuse of user management features.",
+    recommendation: "It is recommended to implement strict server-side authorization checks to ensure users can only access or modify resources they are permitted to. Each request should be validated against the user’s role, permissions, and associated organization. Avoid relying solely on client-side parameters to enforce access control.t",
     type: "Web App"
   },
   {
-    name: "Cross-Site Request Forgery (CSRF)"
-    severity: "High"
-    observation: "During the assessment, KPMG discovered that the application is vulnerable to CSRF. The original authenticated request was used to fetch the motherplanstatus file, but a crafted CSRF request was able to successfully fetch the pisiferapalmstatus file without requiring re-authentication, indicating a lack of proper CSRF protections."
-    impact: "An attacker can trick an authenticated user into executing unwanted actions, such as accessing or modifying sensitive resources without their knowledge or consent. This could lead to unauthorized data access or manipulation."
-    recommendation: "Implement anti-CSRF tokens for all state-changing and sensitive data-fetching requests. These tokens should be unique per session and validated on the server side. Also, ensure that the application verifies the Origin or Referer header for sensitive operations."
+    name: "Cross-Site Request Forgery (CSRF)",
+    severity: "High",
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to CSRF. The original authenticated request was used to fetch the motherplanstatus file, but a crafted CSRF request was able to successfully fetch the pisiferapalmstatus file without requiring re-authentication, indicating a lack of proper CSRF protections.",
+    impact: "An attacker can trick an authenticated user into executing unwanted actions, such as accessing or modifying sensitive resources without their knowledge or consent. This could lead to unauthorized data access or manipulation.",
+    recommendation: "Implement anti-CSRF tokens for all state-changing and sensitive data-fetching requests. These tokens should be unique per session and validated on the server side. Also, ensure that the application verifies the Origin or Referer header for sensitive operations.",
     type: "Web App"
   },
   {
-    name: "Session Hijacking via Reusable Authenticated Cookies"
-    severity: "High"
-    observation: "During the assessment, KPMG discovered that the application is vulnerable to session hijacking due to the reuse of authenticated cookies. After logging in, KPMG was able to replace the session cookie with a valid cookie from another user, which resulted in unauthorized access to that user’s account."
-    impact: "This flaw allows attackers to escalate privileges by manipulating cookies, potentially exposing sensitive data and critical functionalities intended only for administrators."
-    recommendation: "Implement strict server-side access control checks for all privileged actions and user roles. Avoid relying solely on client-side session data for authorization. Regenerate session cookies upon login and ensure that role-based access is enforced on the backend for every request."
+    name: "Session Hijacking via Reusable Authenticated Cookies",
+    severity: "High",
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to session hijacking due to the reuse of authenticated cookies. After logging in, KPMG was able to replace the session cookie with a valid cookie from another user, which resulted in unauthorized access to that user’s account.",
+    impact: "This flaw allows attackers to escalate privileges by manipulating cookies, potentially exposing sensitive data and critical functionalities intended only for administrators.",
+    recommendation: "Implement strict server-side access control checks for all privileged actions and user roles. Avoid relying solely on client-side session data for authorization. Regenerate session cookies upon login and ensure that role-based access is enforced on the backend for every request.",
     type: "Web App"
   },
   {
