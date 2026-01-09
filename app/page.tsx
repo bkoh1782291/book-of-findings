@@ -1,5 +1,4 @@
 /* 
-
   Book of Findings app 
   To-Do:
   - add multiple select for findings
@@ -22,9 +21,76 @@ type Finding = {
   type: "Web App" | "Mobile" | "Infra" | "Wi-Fi" | "Thick Client" | "Red Team" | "Source Code" | "Others";
 };
 
+    /*
+    {
+      name:
+      severity:
+      observation:
+      impact:
+      recommendation:
+      type:
+    }, 
+    */
+
 const findings: Finding[] = [
+  // {
+  //     name: ""
+  //     severity: ""
+  //     observation: ""
+  //     impact: ""
+  //     recommendation: ""
+  //     type: "Red Team"
+  //   },
   {
-    name: "Cookie SameSite Flag",
+    name: "Privileged escalation via IDOR Vulnerability"
+    severity: "High"
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to IDOR. A trainee user was able to escalate their privileges by modifying the request URL parameter (e.g., role=001), successfully changing their role to admin without any server-side authorization checks."
+    impact: "An attacker could gain unauthorized access to administrative-level functionalities, which may lead to data leakage, unauthorized configuration changes, and abuse of user management features."
+    recommendation: "It is recommended to implement strict server-side authorization checks to ensure users can only access or modify resources they are permitted to. Each request should be validated against the user’s role, permissions, and associated organization. Avoid relying solely on client-side parameters to enforce access control.t"
+    type: "Web App"
+  },
+  {
+    name: "Cross-Site Request Forgery (CSRF)"
+    severity: "High"
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to CSRF. The original authenticated request was used to fetch the motherplanstatus file, but a crafted CSRF request was able to successfully fetch the pisiferapalmstatus file without requiring re-authentication, indicating a lack of proper CSRF protections."
+    impact: "An attacker can trick an authenticated user into executing unwanted actions, such as accessing or modifying sensitive resources without their knowledge or consent. This could lead to unauthorized data access or manipulation."
+    recommendation: "Implement anti-CSRF tokens for all state-changing and sensitive data-fetching requests. These tokens should be unique per session and validated on the server side. Also, ensure that the application verifies the Origin or Referer header for sensitive operations."
+    type: "Web App"
+  },
+  {
+    name: "Session Hijacking via Reusable Authenticated Cookies"
+    severity: "High"
+    observation: "During the assessment, KPMG discovered that the application is vulnerable to session hijacking due to the reuse of authenticated cookies. After logging in, KPMG was able to replace the session cookie with a valid cookie from another user, which resulted in unauthorized access to that user’s account."
+    impact: "This flaw allows attackers to escalate privileges by manipulating cookies, potentially exposing sensitive data and critical functionalities intended only for administrators."
+    recommendation: "Implement strict server-side access control checks for all privileged actions and user roles. Avoid relying solely on client-side session data for authorization. Regenerate session cookies upon login and ensure that role-based access is enforced on the backend for every request."
+    type: "Web App"
+  },
+  {
+    name: "Vulnerable Web App Library (DOM Purify)",
+    severity: "High",
+    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of: - DOM Purify (2.3.8)",
+    impact: "Vulnerable to prototype pollution and XSS, which may allow attackers to perform denial of service attacks, remote code execution, and template injection.",
+    recommendation: "Update the following DOM Purify version to: - At least 3.2.7.",
+    type: "Web App"
+  },
+  {
+    name: "Vulnerable Web App Library (JQuery Mobile)",
+    severity: "High",
+    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of: - Jquery Mobile (1.3.1)",
+    impact: "Vulnerable to Open Redirects which leads to cross-site scripting (XSS).",
+    recommendation: "Recommended to remove Jquery Mobile as it is no longer supported with security updates.",
+    type: "Web App"
+  },
+  {
+    name: "Vulnerable Web App Library (JS Zip)",
+    severity: "Medium",
+    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of: - Js Zip (2.2.0)",
+    impact: "Vulnerable to Prototype Pollution and \"Zip Slip\" attacks through Arbitrary File Write via Archive Extraction (Zip Slip). This could lead to Denial of Services (DoS).",
+    recommendation: "Update the web app's following JS Zip version to: - At least 3.10.1",
+    type: "Web App"
+  },
+  {
+    name: "Missing Cookie SameSite Flag Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG identified that the web application does not have the \"SameSite\" attribute enabled for cookies.",
     impact: "The lack of the SameSite flag Increases the risk of CSRF attacks by allowing cookies to be sent with cross-site requests.",
@@ -32,7 +98,7 @@ const findings: Finding[] = [
     type: "Web App",
   },
   {
-    name: "Permissions-Policy Security Header Missing",
+    name: "Missing Permissions-Policy Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG discovered that the \"Permissions-Policy\" Security Header is absent from the web application.",
     impact: "Without the \"Permissions-Policy\" Security Header, the web application is unable to restrict the use of browser features in its own frame and in iframes that it embeds. This means that web features are not controlled.",
@@ -40,7 +106,7 @@ const findings: Finding[] = [
     type: "Web App"
   },
   {
-    name: "Cross-Origin-Embedder-Policy Security Header Missing",
+    name: "Missing Cross-Origin-Embedder-Policy Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Embedder-Policy\" Security Header was not configured on the web application.",
     impact: "Without the \"Cross-Origin-Embedder-Policy\" Security Header, the web application can't prevent a document from accessing cross-origin resources.",
@@ -48,7 +114,7 @@ const findings: Finding[] = [
     type: "Web App"
   },
   {
-    name: "Cross-Origin-Resource-Policy Security Header Missing",
+    name: "Missing Cross-Origin-Resource-Policy Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Resource-Policy\" Security Header is absent from the web application. The purpose of the header is to control which origins can load your resources (e.g., images, scripts), preventing unauthorized cross-origin access.",
     impact: "Without the \"Cross-Origin-Resource-Policy\" Security Header, the web application is unable to block access to a specific resource that is sent by the server.",
@@ -117,7 +183,7 @@ const findings: Finding[] = [
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Command Injections. This was observed through the injection of HTML code that retrieved the website's cookie values.",
     impact: "Command Injection allows attackers to execute arbitrary system commands on the server through scirpts and malicious code. This can lead to full system compromise, data theft, or service disruption.",
-    recommendation: "Reconfigure the web application to use parameterized queries or safe APIs that do not leak any information from the malicious code. More importantly, validate and sanitize all user inputs strictly. Lastly, run applications with the least privileges necessary."
+    recommendation: "Reconfigure the web application to use parameterized queries or safe APIs that do not leak any information from the malicious code. More importantly, validate and sanitize all user inputs strictly."
   },
   {
     name: "Arbitrary File Execution via File Upload",
@@ -146,7 +212,7 @@ const findings: Finding[] = [
     name: "Sensitive Directories & Pages Publicly Accessible",
     severity: "Critical",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the directory listing page (refer WA-05) includes sensitive pages and directories that are publicly accessible.",
+    observation: "During the assessment, KPMG identified that the directory listing page includes sensitive pages and directories that are publicly accessible.",
     impact: "Unauthorised users may access the directories potentially causing information leakage or compromising of data integrity.",
     recommendation: "Restrict access to the the directory listing page by using proper authentication and authorization mechanims."
   },
@@ -156,15 +222,15 @@ const findings: Finding[] = [
     type: "Web App",
     observation: "During the assessment KPMG identified that the Redis server running on the remote host does not require any password authentication to access it. ",
     impact: "The lack of password authentication on Redis server allows attackers to gain unauthorized access to the Redis server, execute arbitary commands,  gain access to sensitive data, modify and delete the sensitive data, and has potential to escalate privileges within the network.",
-    recommendation: "Secure the Redis server by enabling password authentication. "
+    recommendation: "Reconfigure the Redis server by enabling password authentication. "
   },
   {
-    name: "Sensitive Page Accessible",
+    name: "Sensitive Page Accessible (Severity based on sensitivity of Information Leaked)",
     severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified a sensitive page that allows the creation of databases.",
     impact: "Attackers could use these pages to gain insights into application structure or exploit unintended functionalities.",
-    recommendation: "Remove these unwanted web pages."
+    recommendation: "If the webpage is no longer needed, it is recommended to remove it. Else, make it unaccessible to common users."
   },
   {
     name: "Multiple Unsupported Web Server Version",
@@ -706,7 +772,7 @@ Use .htaccess or server settings to restrict access.
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application exposes unauthorised functionalities the navigation bar of the custom error page.",
     impact: "Unauthorised users may view hidden navigation items that may be only meant for high priviledge users.",
-    recommendation: "Review the navigation bar."
+    recommendation: "Review the UI navigation and make the necessary changes to prevent unintended usage."
   },
   {
     name: "Exposed CMS Admin Interface (Moji5)",
@@ -1183,7 +1249,7 @@ References:
     recommendation: "Block or return 405 Method Not Allowed for the specified HTTP requests unless explicitly needed and properly secured."
   },
   {
-    name: "Missing \"X-XSS-Protection\" Header",
+    name: "Missing \"X-XSS-Protection\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"X-XSS-Protection\" header is missing from the response headers.",
@@ -1191,7 +1257,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"X-XSS-Protection\" header."
   },
   {
-    name: "Missing \"X-Content-Type-Options\" Header",
+    name: "Missing \"X-Content-Type-Options\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the X-Content-Type-Options Header is missing from the response headers.",
@@ -1199,7 +1265,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"X-Content-Type Options\" header with value \"nosniff\"."
   },
   {
-    name: "Missing \"X-Frame-Options\" Header",
+    name: "Missing \"X-Frame-Options\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the X-Frame-Options (anti-clickjacking) header is missing from the response headers.",
@@ -1207,7 +1273,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"X-Frame-Options\" header with the value \"DENY\"."
   },
   {
-    name: "Missing \"Content-Security-Policy\" (CSP) Header",
+    name: "Missing \"Content-Security-Policy\" (CSP) Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"Content-Security-Policy\" (CSP) header is missing from the response headers.",
@@ -1215,7 +1281,7 @@ References:
     recommendation: "Reconfigure the web server to include the CSP header along with its relevant attributes."
   },
   {
-    name: "Missing \"X-Permitted-Cross-Domain-Policies\" Header",
+    name: "Missing \"X-Permitted-Cross-Domain-Policies\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"X-Permitted-Cross-Domain-Policies\" header is missing from the response headers.",
@@ -1223,7 +1289,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"X-Permitted-Cross-Domain-Policies\" headers."
   },
   {
-    name: "Missing \"Expect-CT\" Header",
+    name: "Missing \"Expect-CT\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"Expect-CT\" header is missing from the response headers. The purpose of the Expect-CT header is to enforce Certificate Transparency (CT), which is to ensure SSL/TLS certificates are logged and verifiable, preventing the use of fraudulent certificates.",
@@ -1231,7 +1297,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"Expect-CT\" headers."
   },
   {
-    name: "Missing \"Cross-Origin-Opener-Policy\" Header",
+    name: "Missing \"Cross-Origin-Opener-Policy\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"Cross-Origin-Opener-Policy\" header is missing from the response headers. The purpose of the header is to control whether a window can share its browsing context with other windows (e.g., popups), mitigating attacks and cross-origin data leaks.",
@@ -1239,7 +1305,7 @@ References:
     recommendation: "Reconfigure the web server to include the \"Cross-Origin-Opener-Policy\" headers."
   },
   {
-    name: "Missing \"Referrer-Policy\" Header",
+    name: "Missing \"Referrer-Policy\" Security Header",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the \"Referrer-Policy\" header is missing from the response headers. The purpose of the Referrer-Policy header is to control how much information about the referring page (URL) is sent in the Referer header when users click links or load resources.",
@@ -1279,7 +1345,7 @@ References:
     recommendation: "Remove the \"X-Powered-By\" header."
   },
   {
-    name: "Cookie HTTPOnly Flag",
+    name: "Missing Cookie HTTPOnly Flag",
     severity: "Low",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application is missing the HTTPOnly flag on the web app's cookies.",
