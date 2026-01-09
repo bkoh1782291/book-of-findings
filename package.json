@@ -10,9 +10,12 @@
   },
   "dependencies": {
     "file-saver": "^2.0.5",
-    "next": "15.4.6",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "next": "^16.1.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-server-dom-parcel": "^19.2.3",
+    "react-server-dom-turbopack": "^19.2.3",
+    "react-server-dom-webpack": "^19.2.3",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
