@@ -6,7 +6,6 @@
   - findings export
 */
 
-
 "use client";
 import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
@@ -21,18 +20,238 @@ type Finding = {
   type: "Web App" | "Mobile" | "Infra" | "Wi-Fi" | "Thick Client" | "Red Team" | "Source Code" | "Others";
 };
 
-    /*
-    {
-      name:
-      severity:
-      observation:
-      impact:
-      recommendation:
-      type:
-    }, 
-    */
+  /*
+    Active Directory / Windows Findings
+
+    Finding IPT-001: Insufficient LLMNR Configuration (Critical) 
+    Finding IPT-002: Security Misconfiguration – Local Admin Password Reuse (Critical) 
+    Finding IPT-003: Security Misconfiguration – WDigest (Critical) 
+    Finding IPT-004: Insufficient Hardening – Token Impersonation (Critical) 
+    Finding IPT-005: Insufficient Password Complexity (Critical) 
+    Finding IPT-006: Security Misconfiguration – IPv6 (Critical) 
+    Finding IPT-007: Insufficient Hardening – SMB Signing Disabled (Critical) 
+    Finding IPT-008: Insufficient Patch Management – Software (Critical) 
+    Finding IPT-009: Insufficient Patch Management – Operating Systems (Critical) 
+    Finding IPT-010: Insufficient Patching – MS08-067 - ECLIPSEDWING/NETAPI (Critical) 
+    Finding IPT-011: Insufficient Patching – MS12-020 – Remote Desktop RCE (Critical) 
+    Finding IPT-012: Insufficient Patching – MS17-010 - EternalBlue (Critical) 
+    Finding IPT-013: Insufficient Patching – CVE-2019-0708 - BlueKeep (Critical) 
+    Finding IPT-014: Insufficient Privileged Account Management – Kerberoasting (High) 
+    Finding IPT-015: Security Misconfiguration – GPP Credentials (High) 
+    Finding IPT-016: Insufficient Authentication - VNC (High) 
+    Finding IPT-017: Default Credentials on Web Services (High) 
+    Finding IPT-018: Insufficient Hardening – Listable Directories (High)
+    Finding IPT-019: Unauthenticated SMB Share Access (Moderate) 
+    Finding IPT-020: Insufficient Patch Management – SMBv1 (Moderate) 
+    Finding IPT-021: IPMI Hash Disclosure (Moderate) 
+    Finding IPT-022: Insufficient SNMP Community String Complexity (Moderate) 
+    Finding IPT-023: Insufficient Data in Transit Encryption - Telnet (Moderate)
+    Finding IPT-024: Insufficient Terminal Services Configuration (Moderate) 
+  */
+  /*
+  {
+    name: "",
+    severity: "",
+    observation: "",
+    impact: "",
+    recommendation: "",
+    type: ""
+  }, 
+  */
 
 const findings: Finding[] = [
+  {
+    name: "Successful SMB Relay Vulnerability Leading to Unauthorized Access",
+    severity: "High",
+    observation: "The team successfully relayed SMB authentication to deploy a backdoor, indicating that SMB Signing is not enforced on the endpoints.",
+    impact: "The lack of SMB Signing allows attackers to perform credential relay attacks, potentially leading to unauthorized access, lateral movement across the network, and compromise of sensitive systems and data.",
+    recommendation: "Enforcing SMB Signing on all endpoints to ensure the integrity of SMB communications. Additionally, review and harden endpoint configurations, restrict administrative privileges, and implement monitoring to detect unusual authentication activity",
+    type: "Red Team"
+  },
+  {
+    name: "Inadequate Account Password Strength Controls",
+    severity: "Critical",
+    observation: "Successfully obtained service tickets for users and was able to brute-force the “bpdadmin” active directory account password using a 10,000-entry common password wordlist.",
+    impact: "Weak or commonly used passwords expose privileged accounts to unauthorized access, increasing the risk of data compromise, system misconfiguration, and potential disruption of critical services.",
+    recommendation: "Enforce strong password policies for all accounts, including the use of complex, unique passwords for privileged users. Additionally, implement multi-factor authentication (MFA) and account lockout mechanisms after repeated failed login attempts to mitigate brute-force attacks.",
+    type: "Red Team"
+  },
+  {
+    name: "Exposure of Sensitive Information on File Server",
+    severity: "High",
+    observation: "The team identified sensitive information stored on the file server, including user IDs, email addresses, application names, URLs, and credentials. The data was accessible without proper access controls, increasing the risk of unauthorized disclosure",
+    impact: "Exposure of sensitive information could allow attackers to perform targeted phishing attacks, gain unauthorized access to internal applications, compromise user accounts, and escalate privileges within the organization. This may lead to data breaches, regulatory non-compliance, and reputational damage",
+    recommendation: "Implementing strict access controls and permission management on the file server to ensure only authorized personnel can access sensitive data. Additionally, sensitive information such as credentials should never be stored in plaintext.",
+    type: "Red Team"
+  },
+  {
+    name: "Privilege Escalation Risk via Token Impersonation ",
+    severity: "Medium",
+    observation: "The system is vulnerable to token impersonation, a risk commonly associated with service accounts. These accounts are typically low-privileged Windows user accounts with the SeImpersonatePrivilege permission enabled.",
+    impact: "Exploitation of token impersonation can allow attackers to escalate privileges and execute actions under the context of higher-privileged accounts. This could lead to unauthorized access to sensitive data, compromise of critical system functions, and increased risk of lateral movement within the environment.",
+    recommendation: "The team recommends reviewing all service accounts with SeImpersonatePrivilege and applying the principle of least privilege. Remove unnecessary privileges, restrict accounts to only required services, and implement monitoring to detect anomalous privilege escalation attempts. Additionally, consider using managed service accounts or group-managed service accounts where possible to reduce the risk of token impersonation",
+    type: "Red Team"
+  },
+  {
+    name: "LDAP Protocol Information Dumped",
+    severity: "Medium",
+    observation: "The team Discovered that the Active Directory (AD) environment allows any authenticated user to perform bulk queries against the Lightweight Directory Access Protocol (LDAP). The team was able to systematically extract the entire directory structure into human-readable formats (HTML, JSON, CSV).",
+    impact: "Information such as full lists of users, their descriptions (which often contain passwords or sensitive hints), and last login dates. This can lead to identification of high-value targets like Domain Admins or Finance users. In addition, computers and related Operating Systems (OS) are revealed. Active Directory Trusts, Relationships and Policies are revealed which can lead to password-spraying attacks and more.",
+    recommendation: "It is recommended to start enforcing LDAP signing and Channel Binding. This is to prevent man-in-the-middle attacks and ensure queries are coming from trusted sources, enforce LDAP Signing and LDAP Channel Binding via Group Policy.",
+    type: "Red Team"
+  },
+  {
+    name: "Unrestricted Anonymous FTP Access",
+    severity: "High",
+    observation: "The team observed that the FTP service is enabled within the network, and the FTP server permits anonymous login, potentially exposing user files to unauthorized access.",
+    impact: "Allowing anonymous FTP access increases the risk of unauthorized disclosure, modification, or deletion of sensitive files. This could lead to data breaches, loss of intellectual property, or disruption of business operations. The PoC below shows the access of FTP on one of the devices in the network, downloading sensitive files.",
+    recommendation: "The team recommends disabling anonymous FTP access and implementing strong authentication controls. Additionally, review and restrict file permissions, monitor FTP activity, and consider using secure alternatives such as SFTP or FTPS to protect data in transit.",
+    type: "Red Team"
+  },
+  {
+    name: "Unencrypted Communications Protocol (Telnet)",
+    severity: "Medium",
+    observation: "The team observed that Telnet was still being used for multiple devices.",
+    impact: "Telnet transmits everything including usernames and passwords in cleartext. Anyone with network access can view these credentials using a packet sniffer.  An attacker can intercept and inject commands into an active session, effectively taking control of the device being managed (typically a switch, router, or legacy server).",
+    recommendation: "It is recommended to disable telnet and change to more secure forms such as SSH instead.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Unauthorized Exposure of Sensitive Information via Printer Portal",
+    severity: "High",
+    observation: "The team was able to access sensitive information stored on the printer server, including printing history, content of printed documents, personal files, and domain usernames.",
+    impact: "Unauthorized access to printer server data could lead to exposure of confidential organizational and personal information. This increases the risk of data breaches, regulatory non-compliance, and reputational damage.",
+    recommendation: "It is recommended to implement strict access controls on the printer server, including role-based permissions, encryption of stored print jobs, and regular monitoring of access logs. Additionally, sensitive documents should be securely deleted after printing to prevent unintended disclosure.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Lack of Authentication Controls on Network Switches",
+    severity: "High",
+    observation: "Network switch management interface is accessible without any authentication mechanisms.",
+    impact: "Unauthorized access to network switches may allow attackers or unauthorized personnel to modify network configurations, disable network services, or intercept sensitive traffic. This could result in network outages, data breaches, or disruption of critical business operations, and may compromise the overall security of the organization’s IT infrastructure.",
+    recommendation: "It is recommended to implement strong authentication mechanisms for all network switches, including unique credentials for authorized personnel and, where possible, multi-factor authentication. Access controls should be documented and enforced, and all management access should be logged and regularly reviewed. Periodic audits should be conducted to ensure compliance with network security policies.",
+    type: "Red Team"
+  },    
+  {
+    name: "Inadequate Physical Access Controls for Server Room",
+    severity: "Critical",
+    observation: "It was observed that access to the server room did not require formal approval, and extended access was granted without appropriate time restrictions. Additionally, access to the server room was not accompanied by an escort/supervisor.",
+    impact: "The lack of formal approval, time-bound access controls, and escorting procedures for the server room increases the risk of unauthorized physical access. This may result in tampering, theft, or damage to critical IT infrastructure, potentially leading to data breaches, service disruption, and non-compliance with information security standards.",
+    recommendation: "Implement formal approval and access control procedures for the server room, including role-based authorization, time-restricted access, and mandatory escorting of all non-authorized personnel. Access logs should be maintained and periodically reviewed to ensure compliance with physical security policies.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Sensitive Information Exposure",
+    severity: "High",
+    observation: "Observed that IP addresses of critical systems, including the file server and domain controller, were visibly displayed within the server room. This practice exposes sensitive infrastructure information that could assist an attacker during reconnaissance activities",
+    impact: "The exposure of internal IP addressing information increases the risk of targeted attacks against critical systems. An attacker could leverage this information to more easily identify and compromise key assets, potentially leading to unauthorized access to the Active Directory environment and broader network compromise.",
+    recommendation: "Removing or obscuring sensitive infrastructure information from publicly visible areas within the server room. System identification details should be documented in controlled inventories with restricted access, and physical security reviews should be conducted periodically to ensure sensitive information is not exposed.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Inadequate Wireless Network Password Strength",
+    severity: "High",
+    observation: "The team observed that the Wi-Fi password was very simple and easy to guess.",
+    impact: "The use of weak Wi-Fi credentials exposes the network to unauthorized access, potentially allowing attackers to intercept sensitive data, launch attacks against internal systems, or compromise network confidentiality, integrity, and availability.",
+    recommendation: "Enforce a strong password policy for all Wi-Fi networks, including minimum length, complexity, and regular rotation. Multi-factor authentication (MFA) or enterprise-grade authentication methods (e.g., WPA3-Enterprise with RADIUS) should be implemented to enhance network security and prevent unauthorized access.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Excessive Privileges on Domain Accounts",
+    severity: "Critical",
+    observation: "The team successfully leveraged legitimate, low-privileged user credentials obtained via the Rogue AP to dump password hashes for other users within the domain.",
+    impact: "The compromise of low-privileged credentials and subsequent access to password hashes exposes the organization to credential escalation and lateral movement attacks. This could lead to unauthorized access to sensitive systems, data breaches, and potential disruption of critical services.",
+    recommendation: "Service Principle Names SPN’s are displayed with the associated account name, providing important information to attackers. In addition, the Kerberos ticket hashes were dumped for each user. \n Implement multi-factor authentication (MFA) for all accounts, enforcing strong password policies, monitoring for anomalous authentication activity, and restricting the ability of low-privileged accounts to access sensitive password stores.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Kerberoasting Attack Exposure",
+    severity: "High",
+    observation: "It was observed that the Domain controller is vulnerable to Kerberoasting. It is a credential theft attack which involves getting the service account hashes and cracking them offline to uncover clear text passwords, which then can be used to gain access to the Domain Controller",
+    impact: "Once the hash is obtained, the attacker can spend days or weeks cracking it on their own hardware without being detected. Once the attacker has cracked the hash, they are able to gain access to the environment through forging Kerberos tickets. In addition, the extraction of hashes is a 'quiet' action that rarely triggers standard antivirus or basic logging.",
+    recommendation: "It is recommended to enforce a very strong password for these service accounts that have a SPN. A minimum length of 25 characters.  In addition, Monitoring Event ID 4769 (Kerberos Service Ticket Request) for an unusual volume of requests or requests using the weak RC4 encryption (etype 0x17).",
+    type: "Red Team"
+  }, 
+  {
+    name: "Excessive SMB Share Enumeration Risk",
+    severity: "Medium",
+    observation: "Low-privilege account has excessive directory permissions and can access information about other network users and groups.",
+    impact: "Excessive permissions and broad visibility of user accounts increase the risk of unauthorized access and lateral movement within the network. Attackers could exploit these permissions to escalate privileges, access sensitive data, or disrupt business operations.",
+    recommendation: "It is recommended to review and enforce the principle of least privilege across the directory structure. Standard user permissions should be restricted to only what is necessary for their role, and regular access reviews should be conducted. Additionally, monitoring and alerting for abnormal access patterns should be implemented to detect potential misuse of credentials.",
+    type: "Red Team"
+  }, 
+  {
+    name: "Inadequate Physical Access Controls for Site Entry",
+    severity: "Critical",
+    observation: "The team observed that individuals were able to enter the site by providing verbal claims and a fabricated identity. No identification cards were requested, and visitor registration requirements were bypassed.",
+    impact: "Failure to validate visitor identity and registration enables unauthorized individuals to gain access to sensitive premises. This increases the risk of theft, sabotage, insider impersonation, and unauthorized access to critical areas or information. Such weaknesses can lead to operational disruption and regulatory non-compliance. This vulnerability highlights the physical security weaknesses of the refinery which led to the additional vulnerabilities that happened throughout the engagement. ",
+    recommendation: "Periodic refresher training for guardhouse duty officers on identity validation and escalation protocols. This also includes conducting periodic audits of guardhouse procedures and visitor management. ",
+    type: "Red Team"
+  },
+  {
+    name: "Vendor Impersonation",
+    severity: "Critical",
+    observation: "Successfully impersonated a non-existent external vendor using a fabricated Letter of Authorization (LOA) and a staged verification call from a non existent SDG high level employee. This reassurance bypassed frontline checks, and the team was admitted to the premises without credential validation or confirmation from headquarters.",
+    impact: "Failure to verify the identity of vendors or visitors increases the risk of unauthorized access, which may lead to theft, tampering, or compromise of critical assets and sensitive information. This control gap could also result in non-compliance with organizational physical security policies.",
+    recommendation: "It is recommended to implement strict identity verification procedures for all vendors and visitors before granting access to the site. This should include validating credentials, confirming visit purpose with a known personnel from headquarters, and maintaining accurate visitor logs. Periodic audits and training for duty officers on access control policies should be conducted.",
+    type: "Red Team"
+  },
+  {
+    name: "Undetected Network Reconnaissance Activity",
+    severity: "Medium",
+    observation: "The team performed an Nmap scan to identify live hosts within the network segment and observed that no alerts were generated by the SOC team.",
+    impact: "The absence of alerts for scanning activity indicates potential gaps in the SOC monitoring and detection capabilities. This may allow unauthorized network reconnaissance to go unnoticed, increasing the risk of undetected security incidents, such as reconnaissance by malicious actors, which could lead to data breaches or network compromise.",
+    recommendation: "The company recommends reviewing and enhancing SOC monitoring rules and alerting mechanisms to ensure that network scanning and other suspicious activities are detected and responded to promptly. This includes tuning intrusion detection/prevention systems, and implementing anomaly-based monitoring.",
+    type: "Red Team"
+  },
+  {
+    name: "Insufficient Network Access Controls",
+    severity: "High",
+    observation: "We observed that the Wi-Fi network is able to access multiple network segments, this includes critical systems, including the domain controller, Active Directory, and CCTV monitoring. Such access should be restricted and prohibited for Wi-Fi networks",
+    impact: "Allowing Wi-Fi access to critical systems increases the risk of unauthorized access, data compromise, or disruption of key IT and security services. It may also lead to non-compliance with network segmentation and access control policies, exposing the organization to security breaches.",
+    recommendation: "The team recommends reviewing and enhancing SOC monitoring rules and alerting mechanisms to ensure that network scanning and other suspicious activities are detected and responded to promptly. This includes tuning intrusion detection/prevention systems, and implementing anomaly-based monitoring.",
+    type: "Red Team"
+  },
+  {
+    name: "Rogue Network Device: Hardware Implant (Shark Jack)",
+    severity: "Critical",
+    observation: "The team successfully implanted the SharkJack device into the LAN connection to perform network scanning, and the activity went undetected by the Security Operations Center (SOC).",
+    impact: "The lack of detection from SOC allows unauthorized devices and network scanning increases the risk of undetected internal threats, data exfiltration, and lateral movement within the network. This could result in compromise of sensitive systems, loss of critical data, and potential non-compliance with security monitoring requirements",
+    recommendation: "The team recommends enhancing internal network monitoring to detect unauthorized devices and anomalous network scanning activity. This may include deploying network access controls, continuous network traffic monitoring, and integrating alerts for unusual scanning or device behavior to improve SOC detection capabilities.",
+    type: "Red Team"
+  },
+  {
+    name: "Vulnerable JS Library (Angular)",
+    severity: "High",
+    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of Angular. Version - 17.3.12",
+    impact: "Affected versions of the Angular core package is vulnerable to Cross Site Scripting (XSS) via the i18 pipeli when HTML from translated content is not properly sanitized. An attacker can execute arbitrary JavaScript in the application origin by compromising the translation file, potentially inejcting malicious content.",
+    recommendation: "Update the web app's following Angular version to: - At least 19.2.19, 20.3.17, 21.1.6, 21.2.0 or higher.",
+    type: "Web App"
+  },
+  {
+    name: "Vulnerable JS Library (Lodash)",
+    severity: "Medium",
+    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version - Lodash (4.17.21)",
+    impact: "Version 4.17.21 is vulnerable to Prototype Pollution. This refers to the ability to inject properties into existing JavaScript language construct prototypes, such as objects.",
+    recommendation: "Update the web app's following Lodash version to: - At least 4.17.23 or higher.",
+    type: "Web App"
+  },
+  {
+    name: "Directory Enumeration",
+    severity: "Medium",
+    observation: "During the assessment, KPMG identified that the web application is vulnerable to brute-forcing with directory enumeratin. Identifying hidden files, directories, web content and etc.",
+    impact: "Exposes the internal file structures and potentially sensitive information compromising confidentiality.",
+    recommendation: "Disable Directory Listing on the web server, Implement Access controls such as authentication for non-public directories, and apply rate-limiting.",
+    type: "Web App"
+  },     
+  {
+    name: "Unrestricted Network Access to Printers",
+    severity: "Medium",
+    observation: "During network scanning, it was observed that several network printers are accessible from unauthorized network segments. Specifically, these printers accept incoming connections on standard printing and management ports (e.g., TCP 9100, 515, 631, and 80/443) from any IP address within the general corporate network.",
+    impact: "Attackers can access the printer’s internal storage (hard drives) or job history logs to retrieve sensitive documents, scanned images, or user metadata (PII). In addition, printers are often legacy devices with unpatched firmware. An attacker can compromise the printer and use it as a foothold to pivot to other more secure areas of the network.",
+    recommendation: "It is recommended to isolate printers into a dedicated Printer VLAN and configure an Access Control List (ACL), adding firewall rules to deny all direct communication to the Printer VLAN from user workstations.",
+    type: "Red Team"
+  }, 
   {
     name: "Privileged escalation via IDOR Vulnerability",
     severity: "High",
@@ -98,7 +317,7 @@ const findings: Finding[] = [
     type: "Web App"
   },
   {
-    name: "Missing Cross-Origin-Embedder-Policy Security Header",
+    name: "Missing \"Cross-Origin-Embedder-Policy\" Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Embedder-Policy\" Security Header was not configured on the web application.",
     impact: "Without the \"Cross-Origin-Embedder-Policy\" Security Header, the web application can't prevent a document from accessing cross-origin resources.",
@@ -106,7 +325,7 @@ const findings: Finding[] = [
     type: "Web App"
   },
   {
-    name: "Missing Cross-Origin-Resource-Policy Security Header",
+    name: "Missing \"Cross-Origin-Resource-Policy\" Security Header",
     severity: "Low",
     observation: "During the assessment, KPMG discovered that the \"Cross-Origin-Resource-Policy\" Security Header is absent from the web application. The purpose of the header is to control which origins can load your resources (e.g., images, scripts), preventing unauthorized cross-origin access.",
     impact: "Without the \"Cross-Origin-Resource-Policy\" Security Header, the web application is unable to block access to a specific resource that is sent by the server.",
@@ -646,7 +865,7 @@ Use .htaccess or server settings to restrict access.
     name: "Directory Browsing",
     severity: "Medium",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that one of the web application's cookie was set with a path for \"/gisserver/rest/\", which leads to a directory listing page (https://smart.sdguthrie.com/gisserver/rest/) that is accessible even without authentication.",
+    observation: "During the assessment, KPMG identified that one of the web application's cookie was set with a path for \"/gisserver/rest/\", which leads to a directory listing page (https://<url>) that is accessible even without authentication.",
     impact: "Exposes the internal file structures and potentially sensitive information compromising confidentiality.",
     recommendation: "Remove the observed path from the cookie if it is not required and implement proper authentication measures when accessing the observed path."
   },
@@ -1468,7 +1687,7 @@ References:
   },
   {
     name: "RC4 Encryption Algorithm Enabled",
-    severity: "Low",
+    severity: "Medium",
     type: "Infra",
     observation: "During the assessment, KPMG identified that the server uses RC4 encryption algorithms.",
     impact: "RC4 encryption uses the same key for multiple encryptions which may allow attackers to analyse its encryption patterns and recover sensitive data through decrypting cipher text.",
@@ -1618,7 +1837,7 @@ References:
     observation: 'During the assessment, it was observed that "NSAllowsArbitaryLoads" was set to "YES".',
     impact: `If "NSAllowsArbitaryLoads" was set to YES, this disables all application transport security (ATS) restrictions for all network connections, apart from the connections to domains that configure individually in the optional ‘NSExceptionDomains’ dictionary.`,
     recommendation: `Management should consider the following recommendation(s):
-    It is recommended that Boardroom should review the requirement for allowing arbitrary loads and, if not required, Boardroom should change the settings to ‘No’.`
+    It is recommended that [Client] should review the requirement for allowing arbitrary loads and, if not required, [client] should change the settings to ‘No’.`
   },
   {
     name: "File Path Disclosure via Error Page",
