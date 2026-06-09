@@ -95,7 +95,7 @@ const findings: Finding[] = [
   {
     name: "LDAP Protocol Information Dumped",
     severity: "Medium",
-    observation: "The team Discovered that the Active Directory (AD) environment allows any authenticated user to perform bulk queries against the Lightweight Directory Access Protocol (LDAP). The team was able to systematically extract the entire directory structure into human-readable formats (HTML, JSON, CSV).",
+    observation: "The team discovered that the Active Directory (AD) environment allows any authenticated user to perform bulk queries against the Lightweight Directory Access Protocol (LDAP). The team was able to systematically extract the entire directory structure into human-readable formats (HTML, JSON, CSV).",
     impact: "Information such as full lists of users, their descriptions (which often contain passwords or sensitive hints), and last login dates. This can lead to identification of high-value targets like Domain Admins or Finance users. In addition, computers and related Operating Systems (OS) are revealed. Active Directory Trusts, Relationships and Policies are revealed which can lead to password-spraying attacks and more.",
     recommendation: "It is recommended to start enforcing LDAP signing and Channel Binding. This is to prevent man-in-the-middle attacks and ensure queries are coming from trusted sources, enforce LDAP Signing and LDAP Channel Binding via Group Policy.",
     type: "Red Team"
@@ -161,7 +161,7 @@ const findings: Finding[] = [
     severity: "Critical",
     observation: "The team successfully leveraged legitimate, low-privileged user credentials obtained via the Rogue AP to dump password hashes for other users within the domain.",
     impact: "The compromise of low-privileged credentials and subsequent access to password hashes exposes the organization to credential escalation and lateral movement attacks. This could lead to unauthorized access to sensitive systems, data breaches, and potential disruption of critical services.",
-    recommendation: "Service Principle Names SPN’s are displayed with the associated account name, providing important information to attackers. In addition, the Kerberos ticket hashes were dumped for each user. \n Implement multi-factor authentication (MFA) for all accounts, enforcing strong password policies, monitoring for anomalous authentication activity, and restricting the ability of low-privileged accounts to access sensitive password stores.",
+    recommendation: "Service Principal Names SPN’s are displayed with the associated account name, providing important information to attackers. In addition, the Kerberos ticket hashes were dumped for each user. \n Implement multi-factor authentication (MFA) for all accounts, enforcing strong password policies, monitoring for anomalous authentication activity, and restricting the ability of low-privileged accounts to access sensitive password stores.",
     type: "Red Team"
   }, 
   {
@@ -191,7 +191,7 @@ const findings: Finding[] = [
   {
     name: "Vendor Impersonation",
     severity: "Critical",
-    observation: "Successfully impersonated a non-existent external vendor using a fabricated Letter of Authorization (LOA) and a staged verification call from a non existent SDG high level employee. This reassurance bypassed frontline checks, and the team was admitted to the premises without credential validation or confirmation from headquarters.",
+    observation: "Successfully impersonated a non-existent external vendor using a fabricated Letter of Authorization (LOA) and a staged verification call from a non existent high level employee. This reassurance bypassed frontline checks, and the team was admitted to the premises without credential validation or confirmation from headquarters.",
     impact: "Failure to verify the identity of vendors or visitors increases the risk of unauthorized access, which may lead to theft, tampering, or compromise of critical assets and sensitive information. This control gap could also result in non-compliance with organizational physical security policies.",
     recommendation: "It is recommended to implement strict identity verification procedures for all vendors and visitors before granting access to the site. This should include validating credentials, confirming visit purpose with a known personnel from headquarters, and maintaining accurate visitor logs. Periodic audits and training for duty officers on access control policies should be conducted.",
     type: "Red Team"
@@ -223,15 +223,15 @@ const findings: Finding[] = [
   {
     name: "Vulnerable JS Library (Angular)",
     severity: "High",
-    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of Angular. Version - 17.3.12",
-    impact: "Affected versions of the Angular core package is vulnerable to Cross Site Scripting (XSS) via the i18 pipeli when HTML from translated content is not properly sanitized. An attacker can execute arbitrary JavaScript in the application origin by compromising the translation file, potentially inejcting malicious content.",
+    observation: "During the assessment, the team identified that the web application uses an outdated and vulnerable version of Angular. Version - 17.3.12",
+    impact: "Affected versions of the Angular core package is vulnerable to Cross Site Scripting (XSS) via the i18n pipe when HTML from translated content is not properly sanitized. An attacker can execute arbitrary JavaScript in the application origin by compromising the translation file, potentially injecting malicious content.",
     recommendation: "Update the web app's following Angular version to: - At least 19.2.19, 20.3.17, 21.1.6, 21.2.0 or higher.",
     type: "Web App"
   },
   {
     name: "Vulnerable JS Library (Lodash)",
     severity: "Medium",
-    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version - Lodash (4.17.21)",
+    observation: "During the assessment, the team identified that the web application uses an outdated and vulnerable version - Lodash (4.17.21)",
     impact: "Version 4.17.21 is vulnerable to Prototype Pollution. This refers to the ability to inject properties into existing JavaScript language construct prototypes, such as objects.",
     recommendation: "Update the web app's following Lodash version to: - At least 4.17.23 or higher.",
     type: "Web App"
@@ -239,7 +239,7 @@ const findings: Finding[] = [
   {
     name: "Directory Enumeration",
     severity: "Medium",
-    observation: "During the assessment, KPMG identified that the web application is vulnerable to brute-forcing with directory enumeratin. Identifying hidden files, directories, web content and etc.",
+    observation: "During the assessment, KPMG identified that the web application is vulnerable to brute-forcing with directory enumeration. Identifying hidden files, directories, web content and etc.",
     impact: "Exposes the internal file structures and potentially sensitive information compromising confidentiality.",
     recommendation: "Disable Directory Listing on the web server, Implement Access controls such as authentication for non-public directories, and apply rate-limiting.",
     type: "Web App"
@@ -257,7 +257,7 @@ const findings: Finding[] = [
     severity: "High",
     observation: "During the assessment, KPMG discovered that the application is vulnerable to IDOR. A trainee user was able to escalate their privileges by modifying the request URL parameter (e.g., role=001), successfully changing their role to admin without any server-side authorization checks.",
     impact: "An attacker could gain unauthorized access to administrative-level functionalities, which may lead to data leakage, unauthorized configuration changes, and abuse of user management features.",
-    recommendation: "It is recommended to implement strict server-side authorization checks to ensure users can only access or modify resources they are permitted to. Each request should be validated against the user’s role, permissions, and associated organization. Avoid relying solely on client-side parameters to enforce access control.t",
+    recommendation: "It is recommended to implement strict server-side authorization checks to ensure users can only access or modify resources they are permitted to. Each request should be validated against the user’s role, permissions, and associated organization. Avoid relying solely on client-side parameters to enforce access control.",
     type: "Web App"
   },
   {
@@ -362,7 +362,7 @@ const findings: Finding[] = [
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to a Time-Based Blind SQL Injection.",
     impact: "SQL Injection allows an attacker to extract data and possibly modify information within the database using SQL queries that are executable.",
-    recommendation: "Reconfigure the web application's login page with sufficient Input Validation and Sanitization, removing special characters that are used in SQL queries and prepared SQL statements that handle SQL queiries safely."
+    recommendation: "Reconfigure the web application's login page with sufficient Input Validation and Sanitization, removing special characters that are used in SQL queries and prepared SQL statements that handle SQL queries safely."
   },
   {
     name: "Microsoft SQL Server Version Outdated and Unsupported",
@@ -370,7 +370,7 @@ const findings: Finding[] = [
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable due to the SQL Server's version, which is running Microsoft SQL Server 2012. This version of SQL is outdated and unsupported.",
     impact: "The outdated Microsoft SQL version contains multiple well known vulnerabilities that are unpatched. In addition, security support for the SQL server has been deprecated.",
-    recommendation: "Reconfigure the application with an updated SQL version that is still supported wiith security updates. Examples such as SQL Server 2019 or SQL Server 2022."
+    recommendation: "Reconfigure the application with an updated SQL version that is still supported with security updates. Examples such as SQL Server 2019 or SQL Server 2022."
   },
   {
     name: "Stored Cross Site Scripting (XSS)",
@@ -393,7 +393,7 @@ const findings: Finding[] = [
     severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application is vulnerable to Command Injections. This was observed through the injection of HTML code that retrieved the website's cookie values.",
-    impact: "Command Injection allows attackers to execute arbitrary system commands on the server through scirpts and malicious code. This can lead to full system compromise, data theft, or service disruption.",
+    impact: "Command Injection allows attackers to execute arbitrary system commands on the server through scripts and malicious code. This can lead to full system compromise, data theft, or service disruption.",
     recommendation: "Reconfigure the web application to use parameterized queries or safe APIs that do not leak any information from the malicious code. More importantly, validate and sanitize all user inputs strictly."
   },
   {
@@ -416,7 +416,7 @@ const findings: Finding[] = [
     severity: "Critical",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the directory listing page includes an API token generation page which is publicly accessible without authentication.",
-    impact: "Unauthorised users may generate valid API tokens, potentially allowing priviledge escalation or data exfiltration. If tokens generated are long-lived or have broad-scopes, risk of abuse may be higher.",
+    impact: "Unauthorised users may generate valid API tokens, potentially allowing privilege escalation or data exfiltration. If tokens generated are long-lived or have broad-scopes, risk of abuse may be higher.",
     recommendation: "Restrict access to the token generation page using proper authentication and authorization mechanisms."
   },
   {
@@ -425,14 +425,14 @@ const findings: Finding[] = [
     type: "Web App",
     observation: "During the assessment, KPMG identified that the directory listing page includes sensitive pages and directories that are publicly accessible.",
     impact: "Unauthorised users may access the directories potentially causing information leakage or compromising of data integrity.",
-    recommendation: "Restrict access to the the directory listing page by using proper authentication and authorization mechanims."
+    recommendation: "Restrict access to the directory listing page by using proper authentication and authorization mechanisms."
   },
   {
     name: "Redis Server Unprotected by Password Authentication",
     severity: "Critical",
     type: "Web App",
     observation: "During the assessment KPMG identified that the Redis server running on the remote host does not require any password authentication to access it. ",
-    impact: "The lack of password authentication on Redis server allows attackers to gain unauthorized access to the Redis server, execute arbitary commands,  gain access to sensitive data, modify and delete the sensitive data, and has potential to escalate privileges within the network.",
+    impact: "The lack of password authentication on Redis server allows attackers to gain unauthorized access to the Redis server, execute arbitrary commands,  gain access to sensitive data, modify and delete the sensitive data, and has potential to escalate privileges within the network.",
     recommendation: "Reconfigure the Redis server by enabling password authentication. "
   },
   {
@@ -478,7 +478,7 @@ const findings: Finding[] = [
     name: "Vulnerable Apache/Tomcat version",
     severity: "Critical",
     type: "Infra",
-    observation: "During the assessment, KPMG noted that the Tomcat version is outdated, and it's exploits/vulnerabilities are well known, which makes the Apache server more vulnerable.",
+    observation: "During the assessment, KPMG noted that the Tomcat version is outdated, and its exploits/vulnerabilities are well known, which makes the Apache server more vulnerable.",
     impact: `An HTTP request smuggling vulnerability exists in Tomcat due to mishandling Transfer-Encoding headers behind a reverse proxy. An unauthenticated, remote attacker can exploit this, via crafted HTTP requests, to cause unintended HTTP requests to reach the back-end. (CVE-2019-17569)
     - An HTTP request smuggling vulnerability exists in Tomcat due to bad end-of-line (EOL) parsing that allowed some invalid HTTP headers to be parsed as valid. An unauthenticated, remote attacker can exploit this, via crafted HTTP requests, to cause unintended HTTP requests to reach the back-end. (CVE-2020-1935)`,
     recommendation: "Upgrade to Apache Tomcat version 7.0.100, 8.5.51, 9.0.31 or later."
@@ -487,7 +487,7 @@ const findings: Finding[] = [
     name: "Insecure Direct Object Reference (IDOR)",
     severity: "High",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the web application exposes internal object indentifiers in URLs.",
+    observation: "During the assessment, KPMG identified that the web application exposes internal object identifiers in URLs.",
     impact: "Unauthorised users may gain access or modify records belonging to other users, which violates confidentiality and integrity.",
     recommendation: "Enforce strict server-side control checks for every request and avoid relying on client-supplied object references. Consider using indirect identifiers."
   },
@@ -504,16 +504,8 @@ const findings: Finding[] = [
     severity: "High",
     type: "Web App",
     observation: "During the assessment, KPMG observed that the web application uses plaintext communications instead of encrypted communications.",
-    impact: "The web application's communications between the client and the server is unencrypted. Hence, sensitive information such as usernames and passwords are unencrypted and veiwable by attackers that are listening to the network traffic.",
+    impact: "The web application's communications between the client and the server is unencrypted. Hence, sensitive information such as usernames and passwords are unencrypted and viewable by attackers that are listening to the network traffic.",
     recommendation: "Migrate the website to HTTPS by implementing a valid SSL/TLS certificate. Additionally, configure HTTP Strict Transport Security (HSTS) to enforce secure connections and prevent protocol downgrade attacks."
-  },
-  {
-    name: "Double File Extension File Upload",
-    severity: "High",
-    type: "Web App",
-    observation: "During the assessment, KPMG observed that the web application allows files with double extensions (e.g., file.php.jpg) to be uploaded without proper validation, potentially bypassing security filters.",
-    impact: "Attackers can upload malicious scripts disguised as harmless files. If executed on the server, this could lead to remote code execution, data breaches, or full server compromise.",
-    recommendation: "Reject files with multiple extensions and use a whitelist approach for allowed file types. Store uploaded files outside the web root and rename them to prevent execution."
   },
   {
     name: "Unrestricted File Type Upload",
@@ -578,7 +570,7 @@ Use .htaccess or server settings to restrict access.
     severity: "High",
     type: "Web App",
     observation: "During the assessment, KPMG identified that it was possible to login to the web application by capturing and reusing a valid session ID belonging to a valid user",
-    impact: "An attacker can egain access to the web application by sniffing a session ID, potentially gainin access to sensitive functionalities.",
+    impact: "An attacker can gain access to the web application by sniffing a session ID, potentially gaining access to sensitive functionalities.",
     recommendation: "Enforce HTTPS, set Secure/HttpOnly/SameSite cookie flags, and bind sessions to IP or user context to prevent unauthorized session reuse."
   },
   {
@@ -623,7 +615,7 @@ Use .htaccess or server settings to restrict access.
     recommendation: "It is recommended by the industry to update client systems to the latest Microsoft .NET Framework version."
   },
   {
-    name: "Broken Access Control (Priveledge Escalation)",
+    name: "Broken Access Control (Privilege Escalation)",
     severity: "High",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application fails to properly enforce role-based access controls on backend resources. Although the user interface displays different tabs based on the user's role, multiple backend endpoints were accessible directly by low-privileged users through manual URL manipulation or crafted requests. For example, a normal user was able to escalate their privileges and gain access to functionalities intended for a CFO-level user.",
@@ -644,7 +636,7 @@ Use .htaccess or server settings to restrict access.
     type: "Web App",
     observation: "During the assessment, KPMG identified that there was no account lockout after an excessive amount of failed login attempts, thus a brute force attack is possible.",
     impact: "An attacker could gain unauthorized administrative access by systematically guessing the login attempt. This could lead to full system compromise, data theft, or disruption of services.",
-    recommendation: `- Enforce strong password policies for all accounts and implement account lookout or rate-limiting mechanisms to prevent brute force attacks
+    recommendation: `- Enforce strong password policies for all accounts and implement account lockout or rate-limiting mechanisms to prevent brute force attacks
     - Consider enabling Muti-Factor Authentication (MFA) for added security or locking an account after 3 to 5 consecutive failed login attempts`
   },
   {
@@ -684,15 +676,6 @@ Use .htaccess or server settings to restrict access.
         - At least 2.9.4`
   },
   {
-    name: "Vulnerable Web Application Library (highcharts)",
-    severity: "High",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of: - highcharts (x.x.x)",
-    impact: "Vulnerable to XSS and prototype pollution, increasing risk of client-side manipulation and data leakage.",
-    recommendation: `Update the following jquery version to:
-        - At least 3.5.0`
-  },
-  {
     name: "Vulnerable JS Library Detected Moment.js",
     severity: "High",
     type: "Web App",
@@ -702,7 +685,7 @@ Use .htaccess or server settings to restrict access.
         - At least 2.29.4`
   },
   {
-    name: "Vulnerable JS Library Detected JQuery.Stackatables",
+    name: "Vulnerable JS Library Detected jQuery DataTables",
     severity: "High",
     type: "Web App",
     observation: "During the assessment, KPMG identified that the web application uses an outdated and vulnerable version of: - jquery.datatables (x.x.x)",
@@ -723,7 +706,7 @@ Use .htaccess or server settings to restrict access.
     severity: "High",
     type: "Infra",
     observation: "During the assessment, KPMG noted that the NetVault Backup version is vulnerable and multiple exploits could be found online which make this vulnerability more easily to exploit",
-    impact: "This version is vulnerable to Remote Code Execution which allow remote attacker to execute arbitary code. (CVE-1027-17417)",
+    impact: "This version is vulnerable to Remote Code Execution which allow remote attacker to execute arbitrary code. (CVE-2017-17417)",
     recommendation: "Upgrade to Quest NetVault Backup Server 11.4.5 or above."
   },
   {
@@ -751,7 +734,7 @@ Use .htaccess or server settings to restrict access.
     name: "Vulnerable Apache Tomcat Version",
     severity: "High",
     type: "Infra",
-    observation: "During the assessment, KPMG noted that the Tomcat version is outdated, and it's exploits/vulnerabilities are well known, which makes the Apache server more vulnerable.",
+    observation: "During the assessment, KPMG noted that the Tomcat version is outdated, and its exploits/vulnerabilities are well known, which makes the Apache server more vulnerable.",
     impact: `1. These versions are vulnerable to Remote Code Execution (CVE-2016-8735)
     2. Attacker could manipulates the HTTP response to poison the web-cache, perform XSS attack and obtain sensitive information (CVE-2016-6816)`,
     recommendation: `Upgrade Tomcat to latest version.
@@ -843,9 +826,9 @@ Use .htaccess or server settings to restrict access.
         CVE-2020-7066: Sensitive information disclosure
 
         CVE-2020-7067: Out of bound read vulnerability`,
-    recommendation: `"Update to the latest PHP version.
+    recommendation: `Update to the latest PHP version.
                       The latest PHP version in 7.X branch is 7.4.22
-                      https://www.php.net/ChangeLog-7.php"`
+                      https://www.php.net/ChangeLog-7.php`
   },
   {
     name: "Outdated OpenSSH Version",
@@ -959,7 +942,7 @@ Use .htaccess or server settings to restrict access.
     name: "Weak Password Policy Allows Insecure User Credentials",
     severity: "Medium",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the supplied test user credentials are made up of weak password policies (wmu1234). This indicates that even if its not for assessment purposes, a user account can be created with very weak password policies.",
+    observation: "During the assessment, KPMG identified that the supplied test user credentials are made up of weak password policies (wmu1234). This indicates that even if it's not for assessment purposes, a user account can be created with very weak password policies.",
     impact: "Increased risk of account compromise and allow attackers unauthorized access to sensitive data.",
     recommendation: `1. Enforce a strong password policy:
       - Minimum 8-12 characters
@@ -981,8 +964,8 @@ Use .htaccess or server settings to restrict access.
     name: "Exposure of Unauthorised Functionalities in UI Navigation",
     severity: "Medium",
     type: "Web App",
-    observation: "During the assessment, KPMG identified that the web application exposes unauthorised functionalities the navigation bar of the custom error page.",
-    impact: "Unauthorised users may view hidden navigation items that may be only meant for high priviledge users.",
+    observation: "During the assessment, KPMG identified that the web application exposes unauthorised functionalities in the navigation bar of the custom error page.",
+    impact: "Unauthorised users may view hidden navigation items that may be only meant for high privilege users.",
     recommendation: "Review the UI navigation and make the necessary changes to prevent unintended usage."
   },
   {
@@ -1078,22 +1061,11 @@ Use .htaccess or server settings to restrict access.
     recommendation: "Limit access to the admin page by using network controls such as IP whitelisting."
   },
   {
-    name: "XSS Vulnerability Patch",
-    severity: "Medium",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the web application was using an outdated version of WordPress W3 Total Cache plugin (2.1.1)",
-    impact: "Authenticated and Stored Cross-Site Scripting (XSS) vulnerability was discovered by m0ze in WordPress W3 Total Cache plugin (versions <= 2.1.1).",
-    recommendation: `It is recommended to update client systems with the latest available version WordPress W3 Total Cache plugin (at least 2.1.3).
-    Reference: 
-    https://www.wordfence.com/blog/2021/12/xss-vulnerability-patched-in-plugin-designed-to-enhance-woocommerce/
-    https://wpscan.com/plugin/w3-total-cache`
-  },
-  {
     name: "SSL Breach Attack",
     severity: "Medium",
     type: "Web App",
     observation: "During the assessment, KPMG identified the \"gzip\" HTTP compression is vulnerable from a SSL Breach attack.",
-    impact: `The HTTPS protocol, as used in web applications, encrypts compressed data without obfuscating the length of the unencrypted data, which makes it easier for man-in-the-middle attackers to obtain plaintext secret values by observing the length differences of data. Guesses of the HTTP request string is possible. For example, when a URL potentially matches an unknown string in an HTTP response body, it will allow the attacker to inject plaintext into a victims HTTP request. This is commonly called a "BREACH" attack. BREACH stands for (Browser Reconnaissance & Exfiltration via Adaptive Compression of Hypertext). Note, this is a different issue than CVE-2012-4929.
+    impact: `The HTTPS protocol, as used in web applications, encrypts compressed data without obfuscating the length of the unencrypted data, which makes it easier for man-in-the-middle attackers to obtain plaintext secret values by observing the length differences of data. Guesses of the HTTP request string is possible. For example, when a URL potentially matches an unknown string in an HTTP response body, it will allow the attacker to inject plaintext into a victim's HTTP request. This is commonly called a "BREACH" attack. BREACH stands for (Browser Reconnaissance & Exfiltration via Adaptive Compression of Hypertext). Note, this is a different issue than CVE-2012-4929.
 
     BREACH Attacks allows an attacker to have the ability to:
     - Inject partially chosen plaintext into a victim's requests
@@ -1256,7 +1228,7 @@ Use .htaccess or server settings to restrict access.
     severity: "Medium",
     type: "Infra",
     observation: "During the assessment, KPMG noted that the remote web server is affected by an information disclosure vulnerability.",
-    impact: "According to it's Server response header, the installed version of nginx is prior to 1.17.7. Therefore, it is affected by an information disclosure vulnerability.",
+    impact: "According to its Server response header, the installed version of nginx is prior to 1.17.7. Therefore, it is affected by an information disclosure vulnerability.",
     recommendation: "It is best practice as defined by the industry standards, to upgrade to nginx version 1.17.7 or later."
   },
   {
@@ -1303,7 +1275,7 @@ Use .htaccess or server settings to restrict access.
     name: "OpenSSL HeartBeat Information Disclosure (Heartbleed)",
     severity: "Medium",
     type: "Infra",
-    observation: "During the assessment, KPMG detected the hosts are vulnerable to Heartbleed, which could be exploit easily by using online resources.",
+    observation: "During the assessment, KPMG detected the hosts are vulnerable to Heartbleed, which could be exploited easily by using online resources.",
     impact: "An attacker could send crafted packets to the server to trigger a buffer over-read, and hence able to obtain potential sensitive information. (CVE-2014-0610)",
     recommendation: `1. Upgrade to OpenSSL 1.0.1g or above.
     2. Recompile OpenSSL with "-DOPENSSL_NO_HEARTBEATS" flag.`
@@ -1323,16 +1295,8 @@ References:
     severity: "Medium",
     type: "Infra",
     observation: "During the assessment, KPMG noted that the Telnet Server is running on unencrypted channel.",
-    impact: "Using Telnet over an unencrypted channel is not recommended, because login credentials, passwords, and commands are transmitted over the network in plaintext. This allows an attacker to perform man-in-the-middle attacker to eavesdrop on a Telnet session to obtain credentials or other sensitive information and to modify traffic exchanged between a client and server.",
+    impact: "Using Telnet over an unencrypted channel is not recommended, because login credentials, passwords, and commands are transmitted over the network in plaintext. This allows an attacker to perform a man-in-the-middle attack to eavesdrop on a Telnet session to obtain credentials or other sensitive information and to modify traffic exchanged between a client and server.",
     recommendation: "Remediation based on defined industry standards is to disable the Telnet service and exclusively use SSH services instead."
-  },
-  {
-    name: "Unencrypted Telnet Server",
-    severity: "Medium",
-    type: "Infra",
-    observation: "During the testing KPMG detected that the host is running telnet service over an unencrypted channel. The Telnet protocol is obsolete and insecure, because it transmits data in plaintext.",
-    impact: "Telnet transmits data in plaintext, which allows remote attacker to observe, capture even modify the information flow within the traffic.",
-    recommendation: "Remediation based on defined industry standards is to disable the telnet service completely and use SSH instead."
   },
   {
     name: "Vulnerable IBM WebSphere Application Server Version",
@@ -1345,14 +1309,6 @@ References:
     Apply Fix Pack 8.5.5.20 or later.
     References:
     https://www.ibm.com/support/pages/node/6415959`
-  },
-  {
-    name: "Server Information Disclosure",
-    severity: "Medium",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified that the server software version is leaked.",
-    impact: "The potential risk is that the attacker craft an attack from a known vector, based on the vulnerability of the existing server version, and perform a sophisticated attack.",
-    recommendation: "It is recommended to hide server-side information from the front-end facing website, to prevent the server version being disclosed to the attacker."
   },
   {
     name: "SMB Signing not required",
@@ -1387,8 +1343,8 @@ References:
     name: "Terminal Services Encryption Level is Medium",
     severity: "Medium",
     type: "Infra",
-    observation: "During the assessment, KPMG noted that the hosts is using \"Client Compatible\" level as the RDP Encryption Level, this level is not secure enough to prevent attacks like eavesdropping.",
-    impact: "This encryption level is depends on maximum key strength supported by the client. If client using weak cryptography may allow an attacker to eavesdrop the communication more easily.",
+    observation: "During the assessment, KPMG noted that the host is using \"Client Compatible\" level as the RDP Encryption Level, this level is not secure enough to prevent attacks like eavesdropping.",
+    impact: "This encryption level depends on maximum key strength supported by the client. If client using weak cryptography may allow an attacker to eavesdrop the communication more easily.",
     recommendation: "Set the encryption level to High or FIPS Compliant."
   },
   {
@@ -1400,19 +1356,11 @@ References:
     recommendation: "Force the use of SSL/TLS as a transport layer for this service if supported, or/and select the Allow connections only from computers running Remote Desktop with Network Level Authentication setting if it is available."
   },
   {
-    name: "Terminal Services Encryption Level is Medium",
-    severity: "Medium",
-    type: "Infra",
-    observation: "During the assessment, KPMG noted that the hosts is using \"Client Compatible\" level as the RDP Encryption Level. This level is not secure enough to prevent attacks like eavesdropping.",
-    impact: "This encryption level is depends on maximum key strength supported by the client. If client using weak cryptography, it will allow an attacker to eavesdrop the communication with ease due to the lack of complexity.",
-    recommendation: "Remediation and lead practices defined by the industry, is to apply the best possible encryption standard for all devices. Set the encryption level to High or FIPS Compliant."
-  },
-  {
     name: "Insecure Data Storage",
     severity: "Medium",
     type: "Mobile",
     observation: "During the assessment, it is noted that the mobile application is storing the data insecurely. It was observed that the username and other details were stored in plain text.",
-    impact: `Business Impact: Attacker could use the insecure data storage to retrieve sensitive information, it may lead to Identify Theft.
+    impact: `Business Impact: Attacker could use the insecure data storage to retrieve sensitive information, it may lead to Identity Theft.
     Technical Impact: Attacker could steal sensitive information and perform further phishing attacks.`,
     recommendation: "Remediation and lead practices defined by the industry, to not store usernames and passwords in plaintext. This is to prevent the attacker to obtain the credentials with ease. For this case, remediation is to hash the stored data multiple times to increase complexity."
   },
@@ -1421,7 +1369,7 @@ References:
     severity: "Medium",
     type: "Mobile",
     observation: "During the assessment, we noted that the mobile application is handling transmission of the details from spoofed QR code and accepting the transaction. It was observed that info used within the QR code were not properly obfuscated or handled.",
-    impact: `Business Impact: Attacker could use the insecure data to retrieve sensitive information, it may lead to Identify Theft.
+    impact: `Business Impact: Attacker could use the insecure data to retrieve sensitive information, it may lead to Identity Theft.
     Technical Impact: Attacker could steal sensitive information and perform further exploitation.`,
     recommendation: "Remediation and lead practices defined by the industry, is to hash and obfuscate the sensitive information being stored."
   },
@@ -1438,7 +1386,7 @@ References:
     name: "Application Uses Weak Hashing Algorithms",
     severity: "Medium",
     type: "Mobile",
-    observation: "During the assessment, it was noted that the mobile application’s is using multiple weak algorithms for encryption.",
+    observation: "During the assessment, it was noted that the mobile application is using multiple weak algorithms for encryption.",
     impact: `Business Impact: Attackers could easily retrieve and modify the transfer information to plan for further attack or gain access to the application.
     Technical Impact: SHA1, AES, DES is considered as a weak cipher. An attacker could retrieve and modify the data from the weak ciphers and to gain access to the application.`,
     recommendation: "Remediation and lead practices as defined by the industry, is to sign the certificate using a stronger algorithm such as SHA256, AES256."
@@ -1604,14 +1552,6 @@ References:
     recommendation: "Create error handling pages instead, but highly recommend to remove the web pages if not used."
   },
   {
-    name: "Sensitive Information Disclosure via Error Page",
-    severity: "Low",
-    type: "Web App",
-    observation: "During the assessment, KPMG identified the web application exposes sensitive details, including full stack traces and version information (Microsoft .NET and ASP.NET), within the error pages.",
-    impact: "Revealing stack traces and technology version information can assist attackers in fingerprinting the application, potentially tailoring version-specific attacks based on the exposed data.",
-    recommendation: "Implement custom error pages and ensure that technology and version information is not disclosed in error responses."
-  },
-  {
     name: "Information Disclosure through Directory Listing",
     severity: "Low",
     type: "Web App",
@@ -1715,7 +1655,7 @@ References:
     name: "Echo Service Enabled",
     severity: "Low",
     type: "Infra",
-    observation: "During the assessment, KPMG noted that the echo service is enabled on the host. This echo service itself was considered as a vulnerability (CVE-1999-0635) and shall be disable if not required",
+    observation: "During the assessment, KPMG noted that the echo service is enabled on the host. This echo service itself was considered as a vulnerability (CVE-1999-0635) and shall be disabled if not required",
     impact: "The echo service will echoes any data which is sent to it, an attacker could cause denial-of-service by spoofing data and sent to the victim. (CVE-1999-0103)",
     recommendation: `Disable echo service if not required.
     References:
@@ -1809,7 +1749,7 @@ References:
     observation: `During the assessment, KPMG has identified that the mobile application:
       1) Can be executed when the PIN or Pattern lock is not enabled.
       2) Users are able to take screenshot of the mobile application.
-      3) Content is not masked/hided when users minimize application into background and visible in "Recent Apps/tasks" Section.`,
+      3) Content is not masked/hidden when users minimize application into background and visible in "Recent Apps/tasks" Section.`,
     impact: "These security measures are for in case a phone is lost, stolen, or simply left unattended. If the phone is unsecured, anyone that picks it up will have unrestricted access. This could involve data being stolen, or unwanted transaction being done, and could result in considerable financial cost.",
     recommendation: `Remediation for this issue based on industry defined standards, for this issue would be the following:-
         1) Setup to only allow to applications to be executed if the PIN, password, or pattern lock is enabled.
@@ -1834,8 +1774,8 @@ References:
     name: "Recommendation For Reviewing iOS Policy Settings",
     severity: "Low",
     type: "Mobile",
-    observation: 'During the assessment, it was observed that "NSAllowsArbitaryLoads" was set to "YES".',
-    impact: `If "NSAllowsArbitaryLoads" was set to YES, this disables all application transport security (ATS) restrictions for all network connections, apart from the connections to domains that configure individually in the optional ‘NSExceptionDomains’ dictionary.`,
+    observation: 'During the assessment, it was observed that "NSAllowsArbitraryLoads" was set to "YES".',
+    impact: `If "NSAllowsArbitraryLoads" was set to YES, this disables all application transport security (ATS) restrictions for all network connections, apart from the connections to domains that configure individually in the optional ‘NSExceptionDomains’ dictionary.`,
     recommendation: `Management should consider the following recommendation(s):
     It is recommended that [Client] should review the requirement for allowing arbitrary loads and, if not required, [client] should change the settings to ‘No’.`
   },
