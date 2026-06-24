@@ -1,9 +1,12 @@
 /* 
   Book of Findings app 
-  To-Do:
-  - add multiple select for findings
-  - copy all selected findings
-  - findings export
+  - added cvss 4.0 calculator
+  - added pentest methodologies
+
+
+  To Do: 
+  - add finding form
+  - login feature
 */
 
 "use client";
