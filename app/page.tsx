@@ -12,6 +12,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import Cvss40Calculator from "@/components/Cvss40Calculator";
 import Mappings from "@/components/Mappings";
+import Methodology from "@/components/Methodology";
 
 type Finding = {
   name: string;
@@ -1881,7 +1882,7 @@ export default function Home() {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
   // active top-level view
-  const [view, setView] = useState<"findings" | "cvss" | "mappings">("findings");
+  const [view, setView] = useState<"findings" | "cvss" | "mappings" | "methodology">("findings");
 
   useEffect(() => {
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
@@ -2079,6 +2080,13 @@ export default function Home() {
               onClick={() => setView("mappings")}
             >
               Mappings
+            </button>
+            <button
+              className="topnav-btn"
+              data-active={view === "methodology" ? "true" : "false"}
+              onClick={() => setView("methodology")}
+            >
+              Methodology
             </button>
           </nav>
 
@@ -2356,6 +2364,7 @@ export default function Home() {
 
         {view === "cvss" && <Cvss40Calculator />}
         {view === "mappings" && <Mappings />}
+        {view === "methodology" && <Methodology />}
       </main>
 
       {/* ===== Toast ===== */}
