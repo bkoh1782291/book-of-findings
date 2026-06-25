@@ -28,6 +28,16 @@ function clientIp(req: Request): string {
   const fwd = req.headers.get("x-forwarded-for");
   return fwd?.split(",")[0]?.trim() || "unknown";
 }
+
+// Set the Secure flag only when the request is actually HTTPS, so the session
+// cookie also works on plain-HTTP deployments (a browser silently drops a Secure
+// cookie over HTTP). Behind a proxy/LB the real scheme is in x-forwarded-proto;
+// otherwise fall back to the request URL's protocol. HTTPS is still recommended.
+function isHttps(req: Request): boolean {
+  const proto = req.headers.get("x-forwarded-proto")?.split(",")[0]?.trim();
+  if (proto) return proto === "https";
+  return new URL(req.url).protocol === "https:";
+}
 function isThrottled(ip: string): boolean {
   const rec = attempts.get(ip);
   if (!rec || Date.now() - rec.first > WINDOW_MS) return false;
@@ -67,7 +77,7 @@ export async function POST(req: Request) {
   const res = NextResponse.json({ ok: true });
   res.cookies.set(SESSION_COOKIE, token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: isHttps(req),
     sameSite: "lax",
     path: "/",
     // No maxAge → session cookie: re-locks when the browser is closed.
