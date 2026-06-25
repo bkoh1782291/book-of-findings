@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import PasscodeGate from "@/components/PasscodeGate";
 
 const sora = Sora({
   variable: "--font-sans-app",
@@ -31,7 +32,7 @@ export default function RootLayout({
       <body
         className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        {children}
+        <PasscodeGate>{children}</PasscodeGate>
       </body>
     </html>
   );

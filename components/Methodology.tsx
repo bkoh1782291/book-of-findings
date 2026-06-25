@@ -62,7 +62,7 @@ export default function Methodology() {
             onClick={() => switchMethod(m.id)}
           >
             {m.label}
-            <span className="maps-tab-sub">{m.id === "web" ? "OWASP WSTG" : "PTES · MITRE ATT&CK"}</span>
+            <span className="maps-tab-sub">{m.subLabel}</span>
           </button>
         ))}
       </div>
